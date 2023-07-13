@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const controller = require('../controllers/deleteBoardController');
+const controller = require('../controllers/deleteBoard');
 
 router.delete('/:id', controller);
 
-exports.router = router;
+module.exports = router;

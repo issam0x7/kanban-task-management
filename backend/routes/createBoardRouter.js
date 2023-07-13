@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const controller = require('../controllers/createBoardController');
+const controller = require('../controllers/createBoard');
 
 router.post('/', controller);
 
-exports.router = router;
+module.exports = router;

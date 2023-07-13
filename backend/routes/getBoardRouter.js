@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const controller = require('../controllers/getBoardController');
+const controller = require('../controllers/getBoard');
 
 router.get('/:id', controller);
 
-exports.router = router;
+module.exports = router;

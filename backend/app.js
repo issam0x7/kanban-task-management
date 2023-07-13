@@ -3,8 +3,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const getBoardsRouter = require('./routes/getBoardsRouter');
+const getBoardRouter = require('./routes/getBoardRouter');
+const createBoardRouter = require('./routes/createBoardRouter');
+const updateBoardRouter = require('./routes/updateBoardRouter');
+const deleteBoardRouter = require('./routes/deleteBoardRouter');
 
 var app = express();
 
