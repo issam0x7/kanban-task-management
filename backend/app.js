@@ -8,12 +8,17 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+// middlewares
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// routes
+app.use('/api/boards', getBoardsRouter);
+app.use('/api/boards', getBoardRouter);
+app.use('/api/boards', createBoardRouter);
+app.use('/api/boards', updateBoardRouter);
+app.use('/api/boards', deleteBoardRouter);
 
 module.exports = app;
