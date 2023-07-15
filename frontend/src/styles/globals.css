@@ -5,7 +5,76 @@
 @layer base {
   :root {
 
+    --background : 0 0% 100%;
+    --foreground : 235 69% 97%;
 
-    --primary : 242 48% 58%
+    --primary : 242 48% 58%;
+    --primary-foreground : 210 40% 98%;
+
+    --secondary: 221 69% 94%;
+    --secondary-foreground : 242 48% 58%;
+    --secondary-hover : 242, 48%, 58%, 0.25;
+
+    --destructive: 0 78% 63%;
+    --destructive-foreground: 210 40% 98%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --border : 216 15% 57%; 
+    --input: 214.3 31.8% 91.4%;
+
+    --ring : 242 48% 58%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    
+    --background : 235 69% 97%;
+    --foreground :  0 0% 100%;
+
+    --primary : 242 48% 58%;
+    --primary-foreground : 210 40% 98%;
+
+    --secondary: 221 69% 94%;
+    --secondary-foreground : 242 48% 58%;
+    --secondary-hover : 242, 48%, 58%, 0.25;
+
+    --destructive: 0 78% 63%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring : 242 48% 58%;
+
+     
+
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --border : 216 15% 57%;
+    --input: 217.2 32.6% 17.5%;
+
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
