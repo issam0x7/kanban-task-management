@@ -10,7 +10,7 @@ const {
 router.get('/', getBoards)
     .post('/', createBoard)
     .get('/:id', getBoard)
-    .patch('/:id', updateBoard)
+    .put('/:id', updateBoard)
     .delete('/:id', deleteBoard);
 
 module.exports = router;

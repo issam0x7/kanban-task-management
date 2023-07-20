@@ -3,7 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const boardsRouter = require('./routes/boardRouters');
+const boardRouters = require('./routes/boardRoutes');
 
 var app = express();
 
@@ -14,6 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // routes
-app.use('/api/boards', boardsRouters);
+app.use('/api/boards', boardRouters);
 
 module.exports = app;

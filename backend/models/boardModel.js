@@ -20,6 +20,10 @@ const columnSchema = new mongoose.Schema({
 const boardSchema = new mongoose.Schema({
   name: String,
   columns: [columnSchema],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 }, { _id: true }); // Include the _id field explicitly
 
 module.exports = mongoose.model('Board', boardSchema);
