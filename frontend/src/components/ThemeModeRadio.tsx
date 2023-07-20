@@ -1,6 +1,6 @@
 
 import Image from "next/image";
-import RadioThemeMode from "./Radio";
+import RadioThemeMode from "./RadioThemeMode";
 
 
 const ThemeModeRadio = () => {
