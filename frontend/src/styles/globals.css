@@ -15,6 +15,8 @@
     --secondary-foreground : 242 48% 58%;
     --secondary-hover : 242, 48%, 58%, 0.25;
 
+    
+
     --destructive: 0 78% 63%;
     --destructive-foreground: 210 40% 98%;
 
@@ -33,17 +35,19 @@
     --ring : 242 48% 58%;
 
     --radius: 0.5rem;
+
+    --light-gray : 220 69% 97%;
   }
 
   .dark {
     
-    --background : 235 69% 97%;
+    --background : 235 12% 19%;
     --foreground :  0 0% 100%;
 
     --primary : 242 48% 58%;
     --primary-foreground : 210 40% 98%;
 
-    --secondary: 221 69% 94%;
+    --secondary: 0 0% 100%;
     --secondary-foreground : 242 48% 58%;
     --secondary-hover : 242, 48%, 58%, 0.25;
 
@@ -65,7 +69,9 @@
     --card-foreground: 210 40% 98%;
  
     --border : 216 15% 57%;
-    --input: 217.2 32.6% 17.5%;
+    --input: 216, 15%, 57%, 0.25;
+
+    --dark-gray: 235 16% 15% ;
 
   }
 }
