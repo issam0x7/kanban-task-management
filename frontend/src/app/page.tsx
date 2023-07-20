@@ -6,7 +6,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import SubTaskCheckBox from "@/components/SubTaskCheckbox";
+import ThemeModeRadio from "@/components/ThemeModeRadio";
 
 export default function Home() {
   return (
@@ -22,7 +24,9 @@ export default function Home() {
           <SelectItem value="dark">Dark</SelectItem>
           <SelectItem value="system">System</SelectItem>
         </SelectContent>
-      </Select>
+      </Select >
+      <SubTaskCheckBox label="test" checked={false} />
+      <ThemeModeRadio />
     </main>
   )
 }
