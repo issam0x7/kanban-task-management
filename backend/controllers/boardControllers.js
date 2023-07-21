@@ -18,7 +18,19 @@ async function createBoard(req, res) {
 // @route GET /api/boards/:id
 // @access Private
 async function getBoard(req, res) {
-    res.send(`The board with ${req.params.id} id was sent`);
+    try {
+        const boardId = req.params.id;
+        const board = await Board.findById(boardId).exec();
+    
+        if (!board) {
+          return res.status(404).json({ message: 'Board not found' });
+        }
+    
+        res.json({ board });
+      } catch (error) {
+        console.error('Error getting the board:', error);
+        res.status(500).json({ message: 'Server Error' });
+      }
 }
 
 // @desc Get all boards
