@@ -32,7 +32,27 @@ async function getBoards(req, res) {
 // @route PATCH /api/boards/:id
 // @access Private
 async function updateBoard(req, res) {
-    res.send('Board updated!');
+    const { id, name, columns } = req.body;
+
+    // Confirm data
+    if (!id) {
+        return res.status(400).json({ message: 'Board ID required' });
+    }    
+
+    // Confirm board exists to update
+    const board = await Board.findById(id).exec();
+
+    if (!board) {
+        return res.status(400).json({ message: 'Board not found' });
+    }
+
+    // Update board
+    board.name = name;
+    board.columns = columns;
+
+    const updatedBoard = await board.save()
+
+    res.json(`'${updatedBoard.name}' updated`)
 }
 
 // @desc Delete a board
@@ -46,11 +66,11 @@ async function deleteBoard(req, res) {
         return res.status(400).json({ message: 'Board ID required' })
     }
 
-    // Confirm note exists to delete 
+    // Confirm board exists to delete 
     const board = await Board.findById(id).exec()
 
     if (!board) {
-        return res.status(400).json({ message: 'Note not found' })
+        return res.status(400).json({ message: 'Board not found' })
     }
 
     const result = await board.deleteOne()
