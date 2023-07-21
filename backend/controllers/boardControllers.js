@@ -39,7 +39,25 @@ async function updateBoard(req, res) {
 // @route DELETE /api/boards/:id
 // @access Private
 async function deleteBoard(req, res) {
-    res.send(`The board with ${req.params.id} id was deleted`);
+    const { id } = req.body
+
+    // Confirm data
+    if (!id) {
+        return res.status(400).json({ message: 'Board ID required' })
+    }
+
+    // Confirm note exists to delete 
+    const board = await Board.findById(id).exec()
+
+    if (!board) {
+        return res.status(400).json({ message: 'Note not found' })
+    }
+
+    const result = await board.deleteOne()
+
+    const reply = `Board '${result.name}' with ID ${result._id} deleted`
+
+    res.json(reply)
 }
 
 module.exports = {
