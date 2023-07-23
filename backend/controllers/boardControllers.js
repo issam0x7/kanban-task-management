@@ -6,11 +6,21 @@ const Board = require('../models/boardModel');
 async function createBoard(req, res) {
     try {
         const { name, columns } = req.body;
-        const newBoard = await Board.create({ name, columns });
+
+        // Confirm data
+        if (!name) {
+            return res.status(400).json({ message: 'Board name required' });
+        } else if (!columns) {
+            return res.status(400).json({ message: 'Board columns required' });
+        } else if (!Array.isArray(columns)) {
+            return res.status(400).json({ message: 'Board columns must be an array' });
+        }
+
+        const newBoard = await Board.create({name, columns});
 
         return res.status(201).json({ message: 'Board created', board: newBoard });
     } catch (error) {
-        console.error('Error creating the board:', error);
+        console.error('Error creating the board:', error.message);
         res.status(500).json({ message: 'Server Error' });
     }
 }
@@ -29,7 +39,7 @@ async function getBoard(req, res) {
 
         res.json({ board });
     } catch (error) {
-        console.error('Error getting the board:', error);
+        console.error('Error getting the board:', error.message);
         res.status(500).json({ message: 'Server Error' });
     }
 }
