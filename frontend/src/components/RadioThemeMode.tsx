@@ -1,4 +1,5 @@
 "use client"
+import { useTheme } from "next-themes";
 import { InputHTMLAttributes, forwardRef, useRef } from "react";
 
 
@@ -22,10 +23,15 @@ const RadioThemeMode = () => {
 
   const radioRef = useRef<HTMLButtonElement>(null);
 
+  const { theme, setTheme } = useTheme();
+  radioRef.current?.setAttribute('data-mode', theme || "");
+  
+
   const handleClick = () => {
     let currentMode =  radioRef.current?.dataset.mode;
-
-    radioRef.current?.setAttribute('data-mode', currentMode == "light" ? "dark" : "light");
+    let nextMode: string = currentMode == "light" ? "dark" : "light"
+    radioRef.current?.setAttribute('data-mode', nextMode );
+    setTheme(nextMode);
 
   }
 
