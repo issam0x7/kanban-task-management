@@ -8,5 +8,5 @@ const errorHandler = (err, req, res, next) => {
 
     res.status(status);
 
-    res.json({ message: })
+    res.json({ message: 'Server Error' })
 }

@@ -7,21 +7,15 @@ async function createBoard(req, res) {
     try {
         const { name, columns } = req.body;
 
-        // Confirm data
-        if (!name) {
-            return res.status(400).json({ message: 'Board name required' });
-        } else if (!columns) {
-            return res.status(400).json({ message: 'Board columns required' });
-        } else if (!Array.isArray(columns)) {
-            return res.status(400).json({ message: 'Board columns must be an array' });
+        if (!name || !columns || !Array.isArray(columns)) {
+            return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
 
-        const newBoard = await Board.create({name, columns});
+        const newBoard = await Board.create({ name, columns });
 
-        return res.status(201).json({ message: 'Board created', board: newBoard });
+        return res.status(201).json({ success: true, message: 'Board created', board: newBoard });
     } catch (error) {
-        console.error('Error creating the board:', error.message);
-        res.status(500).json({ message: 'Server Error' });
+        next(error);
     }
 }
 
@@ -39,8 +33,7 @@ async function getBoard(req, res) {
 
         res.json({ board });
     } catch (error) {
-        console.error('Error getting the board:', error.message);
-        res.status(500).json({ message: 'Server Error' });
+        next(error);
     }
 }
 
@@ -54,8 +47,7 @@ async function getBoards(req, res) {
 
         res.json(boards);
     } catch (error) {
-        console.error('Error getting boards:', error);
-        res.status(500).json({ message: 'Server Error' });
+        next(error);
     }
 }
 
@@ -86,8 +78,7 @@ async function updateBoard(req, res) {
 
         res.json(`'${updatedBoard.name}' updated`);
     } catch (error) {
-        console.error('Error updating the board:', error);
-        res.status(500).json({ message: 'Server Error' });
+        next(error);
     }
 }
 
@@ -116,8 +107,7 @@ async function deleteBoard(req, res) {
 
         res.json(reply);
     } catch (error) {
-        console.error('Error deleting the board:', error);
-        res.status(500).json({ message: 'Server Error' });
+        next(error);
     }
 }
 
