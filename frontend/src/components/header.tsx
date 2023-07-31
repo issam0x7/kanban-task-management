@@ -5,7 +5,7 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between h-20 bg-white dark:bg-gray-dark">
-      <div className="header-logo flex items-center  border-r border-lines h-full   w-[300px] ps-8 flex-shrink-0 dark:bg-gray-dark">
+      <div className="header-logo flex items-center  border-r border-lines h-full   w-[300px] ps-6 flex-shrink-0 dark:bg-gray-dark">
         
           <Image
             src="/images/logo-dark.png"
