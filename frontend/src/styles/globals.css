@@ -43,7 +43,7 @@
 
   .dark {
     
-    --background : 235 12% 19%;
+    --background : 235 16% 15%;
     --foreground :  0 0% 100%;
 
     --primary : 242 48% 58%;
@@ -73,7 +73,8 @@
     --border : 216 15% 57%;
     --input: 216, 15%, 57%, 0.25;
 
-    --dark-gray: 235 16% 15% ;
+    --dark-gray: 235 12% 19% ;
+    --very-dark-gray : 235 16% 15%;
 
     --lines : 236 11% 27%;
 
