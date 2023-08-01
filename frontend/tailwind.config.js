@@ -23,6 +23,7 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         'lightgrey':"hsl(var(--light-grey))",
+        lines : "hsl(var(--lines))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -53,7 +54,8 @@ module.exports = {
         },
         gray : {
           light: "hsl(var(--light-gray))",
-          dark : "hsl(var(--dark-gray))"
+          dark : "hsl(var(--dark-gray))",
+          "dark-1" : "hsl(var(--very-dark-gray))"
         }
         
       },

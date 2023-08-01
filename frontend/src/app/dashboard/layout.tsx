@@ -7,7 +7,7 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({children} : DashboardLayoutProps) {
   
   return (
-    <div className="flex min-h-screen flex-col ">
+    <div className="flex h-screen flex-col ">
       {children}
     </div>
   )

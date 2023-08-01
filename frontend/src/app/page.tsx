@@ -8,7 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SubTaskCheckBox from "@/components/SubTaskCheckbox";
-import ThemeModeRadio from "@/components/ThemeModeRadio";
 
 export default function Home() {
   return (
@@ -26,7 +25,6 @@ export default function Home() {
         </SelectContent>
       </Select >
       <SubTaskCheckBox label="test" checked={false} />
-      <ThemeModeRadio />
     </main>
   )
 }
