@@ -10,3 +10,5 @@ const errorHandler = (err, req, res, next) => {
 
     res.json({ message: 'Server Error' })
 }
+
+module.exports = errorHandler;
