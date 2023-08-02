@@ -1,5 +1,5 @@
 import ThemeSwitcher from "@/components/ThemeSwitcher"
-import { AddTaskToggler, TaskBoardToggler } from "@/components/taskBoardToggler";
+import { AddBoardToggler, BoardToggler } from "@/components/taskBoardToggler";
 
 
 
@@ -12,8 +12,8 @@ const SideBar = ( ) => {
       <div className="boards">
           <h6 className="text-sm px-6">ALL BOARDS </h6>
           <div className="board-list mt-6">
-            <TaskBoardToggler taskName="test" />
-            <AddTaskToggler />
+            <BoardToggler taskName="test" />
+            <AddBoardToggler />
           </div>
       </div>
       <div className="control px-6">
