@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/Input";
-import Button from "@/components/ui/button";
+// import Button from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -8,11 +8,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SubTaskCheckBox from "@/components/SubTaskCheckbox";
+import CreateBoardModal from "@/components/modals/create-board-modal";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button variant="destructive" />
+      {/* <Button variant="destructive" />
       <Input type="text" placeholder="text"></Input>
       <Select>
         <SelectTrigger className="w-[180px]">
@@ -24,7 +25,8 @@ export default function Home() {
           <SelectItem value="system">System</SelectItem>
         </SelectContent>
       </Select >
-      <SubTaskCheckBox label="test" checked={false} />
+      <SubTaskCheckBox label="test" checked={false} /> */}
+      <CreateBoardModal />
     </main>
   )
 }
