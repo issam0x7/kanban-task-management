@@ -19,10 +19,10 @@ const BoardToggler = ({taskName} : boardTogglerProps  ) => {
 
 const AddBoardToggler = ({onClick} : any) => {
   return (
-    <div className="task-toggler py-3 hover:bg-primary-hover/10 ps-6 w-[85%] rounded-e-full group">
+    <div className="task-toggler py-3  ps-6 w-[85%] rounded-e-full group">
       <button  className="flex items-center gap-4 font-bold" onClick={onClick} >
-        <LayoutDashboard size={20} />
-        <span className="text-primary text-base group-hover:text-primary">+ Create New Board</span>
+        <LayoutDashboard size={20} className="text-primary" />
+        <span className="text-primary text-base">+ Create New Board</span>
       </button>
     </div>
   )

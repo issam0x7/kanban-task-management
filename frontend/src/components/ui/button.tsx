@@ -28,12 +28,12 @@ const buttonVariants = cva("inline-flex items-center justify rounded-3xl text-sm
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonVariants> {}
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(({className, variant, size, ...props}, ref) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(({className, variant, size, children, ...props}, ref) => {
   return (
     <button className={twMerge(buttonVariants({variant, size, className}))}
     ref={ref}
     {...props}>
-      test
+      {children}
     </button>
   )
 })
