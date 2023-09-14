@@ -29,7 +29,7 @@ const formSchema = z.object({
   }),
   columns: z.array(
     z.object({
-      column: z.string(),
+      column: z.string().min(3),
     })
   ),
 });
@@ -85,12 +85,14 @@ const CreateBoardModal = () => {
               {fields.map((item, i) => (
                 <div className="flex items-center">
                   <Input type="text" {...form.register(`columns.${i}.column`)} />
-                  <Button className="pe-0" size="sm" variant="transparent">
+                  <Button className="pe-0" size="sm" variant="transparent" onClick={() => remove(i)}>
                     <X />
                   </Button>
                 </div>
               ))}
-            <Button className="w-full rounded-full" variant="secondary" >Create New Board</Button>
+            <Button className="w-full rounded-full" variant="secondary" onClick={() => {
+              append({column : ""})
+            }} >Create New Board</Button>
             </div>
             <Button className="w-full rounded-full" type="submit">Create New Board</Button>
           </form>
