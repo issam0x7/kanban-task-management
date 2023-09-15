@@ -1,12 +1,10 @@
-import Button from "@/components/ui/button";
 
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 // import { Plus } from "lucide"
  
 export default async function DashboardPage () {
-
-  
 
   
 

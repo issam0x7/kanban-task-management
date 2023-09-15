@@ -1,7 +1,9 @@
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import { AddBoardToggler, BoardToggler } from "@/components/taskBoardToggler";
-import Header from "../header";
+
+
 import NavigationHeader from "./navigation-header";
+import NavigationItem from "./navigation-item";
+import CreateBoardNavigation from "./navigation-create-board";
 
 type board = {
   id: string;
@@ -22,10 +24,10 @@ const NavigationSidebar = ({ boards }: sidebarProps) => {
           <h6 className="text-sm px-6">ALL BOARDS </h6>
           <div className="board-list mt-6">
             {boards.map((board) => {
-              return <BoardToggler taskName={board.name} />;
+              return <NavigationItem taskName={board.name} />;
             })}
 
-            <AddBoardToggler />
+            <CreateBoardNavigation />
           </div>
         </div>
         <div className="control px-6">

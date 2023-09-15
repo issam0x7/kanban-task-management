@@ -22,6 +22,7 @@ import {
 import { Input } from "../ui/Input";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -35,6 +36,11 @@ const formSchema = z.object({
 });
 
 const CreateBoardModal = () => {
+
+  const {isOpen, onClose, type} = useModal();
+
+  const isModalOpen = isOpen && type === "createBoard";
+
   const { control, ...form } = useForm<any>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,8 +63,13 @@ const CreateBoardModal = () => {
     console.log(values);
   }
 
+  const handleClose = () => {
+    form.reset();
+    onClose();
+  }
+
   return (
-    <Dialog open>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="border-none py-8 px-8">
         <DialogHeader>
           <DialogTitle className="font-bold text-xl text-black">
@@ -81,16 +92,17 @@ const CreateBoardModal = () => {
               )}
             />
             <div className="flex flex-col gap-3">
-              <label htmlFor="">Board Columns :</label>
+              <label htmlFor="" className="text-sm font-medium">Board Columns :</label>
               {fields.map((item, i) => (
-                <div className="flex items-center">
+                <div className="flex items-center" key={i}>
                   <Input type="text" {...form.register(`columns.${i}.column`)} />
                   <Button className="pe-0" size="sm" variant="transparent" onClick={() => remove(i)}>
                     <X />
                   </Button>
                 </div>
               ))}
-            <Button className="w-full rounded-full" variant="secondary" onClick={() => {
+            <Button className="w-full rounded-full" variant="secondary" onClick={(e) => {
+              e.preventDefault();
               append({column : ""})
             }} >Create New Board</Button>
             </div>

@@ -1,7 +1,11 @@
 import React from "react";
+
 import { getBoards } from "@/api/boards";
+
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
-import Header from "@/components/header";
+
+import ModalProvider from "@/providers/modal-provider";
+
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -13,6 +17,8 @@ export default async function DashboardLayout({
   const boards = await getBoards();
 
   return (
+    <>
+    <ModalProvider />
     <div className="h-screen flex flex-col">
       
       <div className="flex h-full">
@@ -23,5 +29,6 @@ export default async function DashboardLayout({
         {children}
       </div>
     </div>
+    </>
   );
 }
