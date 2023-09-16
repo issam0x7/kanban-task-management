@@ -1,11 +1,12 @@
+import { api } from "@/lib/api";
 
 
 export async function getBoards() {
-  const res = await fetch("http://localhost:3001/api/boards");
-  if (!res.ok) {
+  const res = await api.get("/api/boards");
+  if (res.status !== 200) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error('Failed to fetch data')
   }
  
-  return res.json();
+  return res.data;
 }

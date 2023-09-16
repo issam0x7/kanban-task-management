@@ -3,6 +3,7 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { api } from "@/lib/api";
 import {
   Dialog,
   DialogContent,
@@ -30,22 +31,21 @@ const formSchema = z.object({
   }),
   columns: z.array(
     z.object({
-      column: z.string().min(3),
+      name: z.string().min(3),
     })
   ),
 });
 
 const CreateBoardModal = () => {
-
-  const {isOpen, onClose, type} = useModal();
+  const { isOpen, onClose, type } = useModal();
 
   const isModalOpen = isOpen && type === "createBoard";
 
-  const { control, ...form } = useForm<any>({
+  const { control, ...form } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      columns: [{ column: "Todo" }, { column: "Doing" }],
+      columns: [{ name: "Todo" }, { name: "Doing" }],
     },
   });
 
@@ -55,18 +55,27 @@ const CreateBoardModal = () => {
       control,
     });
 
-  console.log(fields);
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    try {
+      const response = await api.post("/api/boards", values);
+
+      if (response.status === 201) {
+        form.reset();
+        onClose();
+      }
+    } catch (error) {
+      throw new Error("Network Error");
+    }
   }
 
   const handleClose = () => {
     form.reset();
     onClose();
-  }
+  };
+
+  const isSubmitign = form.formState.isSubmitting;
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
@@ -92,21 +101,40 @@ const CreateBoardModal = () => {
               )}
             />
             <div className="flex flex-col gap-3">
-              <label htmlFor="" className="text-sm font-medium">Board Columns :</label>
+              <label htmlFor="" className="text-sm font-medium">
+                Board Columns :
+              </label>
               {fields.map((item, i) => (
                 <div className="flex items-center" key={i}>
-                  <Input type="text" {...form.register(`columns.${i}.column`)} />
-                  <Button className="pe-0" size="sm" variant="transparent" onClick={() => remove(i)}>
+                  <Input type="text" {...form.register(`columns.${i}.name`)} />
+                  <Button
+                    className="pe-0"
+                    size="sm"
+                    variant="transparent"
+                    onClick={() => remove(i)}
+                  >
                     <X />
                   </Button>
                 </div>
               ))}
-            <Button className="w-full rounded-full" variant="secondary" onClick={(e) => {
-              e.preventDefault();
-              append({column : ""})
-            }} >Create New Board</Button>
+              <Button
+                className="w-full rounded-full"
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  append({ name: "" });
+                }}
+              >
+                Create New Board
+              </Button>
             </div>
-            <Button className="w-full rounded-full" type="submit">Create New Board</Button>
+            <Button
+              disabled={isSubmitign}
+              className="w-full rounded-full"
+              type="submit"
+            >
+              Create New Board
+            </Button>
           </form>
         </Form>
       </DialogContent>

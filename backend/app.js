@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { logger } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
@@ -6,6 +7,8 @@ const errorHandler = require('./middleware/errorHandler');
 const boardRouters = require('./routes/boardRoutes');
 
 var app = express();
+
+app.use(cors());
 
 app.use(logger);
 app.use(express.json());
