@@ -14,6 +14,7 @@ const taskSchema = new mongoose.Schema({
 
 const columnSchema = new mongoose.Schema({
   name: String,
+  color : String,
   tasks: [taskSchema],
 });
 
