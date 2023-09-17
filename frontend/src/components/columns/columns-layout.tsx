@@ -7,7 +7,8 @@ const ColumnsLayout = () => {
   return (
     <div className="p-6 bg-gray-light w-full h-full">
       <DndContext>
-        <div className="flex ">
+        <div className="flex gap-8">
+          <ColumnCard />
           <ColumnCard />
         </div>
       </DndContext>
