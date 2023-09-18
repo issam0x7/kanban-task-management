@@ -1,12 +1,18 @@
 import Draggable from "../dnd/draggable";
 import TaskCard from "../tasks/task-card";
 import ColumnDroppable from "./column-droppable";
-import ColumnHeader from "./column-header";
+import ColumnHeader, { ColumnHeaderProps } from "./column-header";
 
-const ColumnCard = () => {
+
+interface ColumnCardProps extends ColumnHeaderProps {
+  tasks : any
+}
+
+
+const ColumnCard = ({name , color, taskNumber, tasks} : ColumnCardProps) => {
   return (
     <div className="">
-      <ColumnHeader name="TODO" color="#333" taskNumber={5} />
+      <ColumnHeader name={name} color="#333" taskNumber={taskNumber} />
       <ColumnDroppable id="lansfdl">
         <div className="flex flex-col gap-4">
           <Draggable id="task">

@@ -1,6 +1,6 @@
 
 
-interface ColumnHeaderProps  {
+export interface ColumnHeaderProps  {
   color : string;
   name : string;
   taskNumber : number

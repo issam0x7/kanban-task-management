@@ -1,11 +1,15 @@
+import { getBoard } from "@/api/boards";
 import ColumnsLayout from "@/components/columns/columns-layout";
+import { boardType } from "@/types/board";
 
 
 
 
-const BoardPage = () => {
+const BoardPage =async ({ params }: { params: { boardId: string } }) => {
+  const board = await getBoard(params.boardId);
+    
   return ( 
-    <ColumnsLayout />
+    <ColumnsLayout board={board.board} />
    );
 }
  
