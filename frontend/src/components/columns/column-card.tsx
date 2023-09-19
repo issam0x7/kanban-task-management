@@ -1,3 +1,4 @@
+import { TaskType } from "@/types/board";
 import Draggable from "../dnd/draggable";
 import TaskCard from "../tasks/task-card";
 import ColumnDroppable from "./column-droppable";
@@ -5,7 +6,7 @@ import ColumnHeader, { ColumnHeaderProps } from "./column-header";
 
 
 interface ColumnCardProps extends ColumnHeaderProps {
-  tasks : any
+  tasks : TaskType [];
 }
 
 
@@ -15,20 +16,15 @@ const ColumnCard = ({name , color, taskNumber, tasks} : ColumnCardProps) => {
       <ColumnHeader name={name} color="#333" taskNumber={taskNumber} />
       <ColumnDroppable id="lansfdl">
         <div className="flex flex-col gap-4">
-          <Draggable id="task">
+          {tasks.map((task, index) => (
+            <Draggable id={task._id}>
             <TaskCard
-              name="task"
-              subTaskNumber={5}
+              name={task.title}
+              subTaskNumber={task.subtasks?.length}
               subTaskCompletedNumber={2}
             />
           </Draggable>
-          <Draggable id="hello">
-            <TaskCard
-              name="task1"
-              subTaskNumber={5}
-              subTaskCompletedNumber={2}
-            />
-          </Draggable>
+          ))}    
         </div>
       </ColumnDroppable>
     </div>

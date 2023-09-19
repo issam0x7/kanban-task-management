@@ -2,10 +2,10 @@
 
 import { DndContext } from "@dnd-kit/core";
 import ColumnCard from "./column-card";
-import { getBoard } from "@/api/boards";
-import { boardType } from "@/types/board";
 
-const ColumnsLayout = ({board}: any) => {
+import { BoardType } from "@/types/board";
+
+const ColumnsLayout = ({board} : { board :BoardType}) => {
 
   console.log(board);
   return (

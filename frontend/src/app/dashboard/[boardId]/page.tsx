@@ -1,6 +1,6 @@
 import { getBoard } from "@/api/boards";
 import ColumnsLayout from "@/components/columns/columns-layout";
-import { boardType } from "@/types/board";
+
 
 
 

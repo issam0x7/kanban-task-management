@@ -1,26 +1,28 @@
 
 
 
-export  interface boardType {
+export  interface BoardType {
   _id : string,
   name : string,
+  columns : ColumnType [] | []
 }
 
-interface columnType {
+interface ColumnType {
   name : string,
   _id : string,
-  tasks : taskType[] | null,
+  tasks : TaskType[] | [] | null,
 }
 
-interface taskType {
+export interface TaskType {
+  _id : string,
   title: string, 
   description : string,
   status : string,
-  subTasks : subTasksType [] | null
+  subtasks : SubTasksType [] | [] 
 }
 
 
-interface subTasksType {
+interface SubTasksType {
   title: String,
   isCompleted: Boolean,
 }
