@@ -1,4 +1,5 @@
 const Board = require("../models/boardModel");
+const Column = require("../models/columnModel")
 
 // @desc Create a board
 // @route POST /api/boards
@@ -6,6 +7,7 @@ const Board = require("../models/boardModel");
 async function createBoard(req, res) {
   try {
     const { name, columns } = req.body;
+    
 
     if (!name || !columns || !Array.isArray(columns)) {
       return res
@@ -13,13 +15,14 @@ async function createBoard(req, res) {
         .json({ success: false, message: "Invalid data provided" });
     }
 
+    
     const newBoard = await Board.create({ name, columns });
 
     return res
       .status(201)
       .json({ success: true, message: "Board created", board: newBoard });
   } catch (error) {
-    next(error);
+    // console.log(error)
   }
 }
 
@@ -47,8 +50,8 @@ async function getBoard(req, res) {
 async function getBoards(req, res) {
   try {
     // Fetch all boards from the database
-    const boards = await Board.find();
-
+    const boards = await Board.find({}).populate('columns').exec();
+    console.log(boards)
     res.json(boards);
   } catch (error) {
     next(error);
