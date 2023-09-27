@@ -4,12 +4,7 @@ export const taskSchema = new mongoose.Schema({
   title: String,
   description: String,
   status: String,
-  subtasks: [
-    {
-      title: String,
-      isCompleted: Boolean,
-    },
-  ],
+  subtasks: [{"type" : mongoose.Schema.Types.ObjectId , "ref" : "Task"}],
 });
 
 module.exports = mongoose.model('Task', taskSchema);
