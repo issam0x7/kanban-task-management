@@ -1,5 +1,4 @@
 const Board = require("../models/boardModel");
-const Column = require("../models/columnModel")
 
 // @desc Create a board
 // @route POST /api/boards

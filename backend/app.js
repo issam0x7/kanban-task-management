@@ -5,18 +5,20 @@ const { logger } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 
 const boardRouters = require('./routes/boardRoutes');
+const tasksRouters = require('./routes/tasksRoutes');
 
 var app = express();
 
 app.use(cors());
 
-app.use(logger);
+// app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api/boards', boardRouters);
+app.use('/api/tasks', tasksRouters);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 module.exports = app;
