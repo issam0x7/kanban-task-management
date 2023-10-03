@@ -2,16 +2,38 @@ const mongoose = require("mongoose");
 const Board = require("../models/boardModel");
 
 async function updateTask(req, res) {
-   const { id } = req.params;
 
-   const result = await Board.findOneAndUpdate({
-      "columns._id" : id
-   }, {
-      $set : [{"tasks.[outer].name" : "test"}]
-   }, 
-   { "arrayFilters" : [ {"outer._id" : "6514579ae6cbfdcf5aeb37c3"}]}
-   );
-   console.log(result);
+   try {
+      const { id } = req.params;
+
+      const {boardId, columnId} = req.body;
+
+      if(!boardId || !columnId) {
+         return res
+        .status(400)
+        .json({ success: false, message: "Invalid data provided" });
+      }
+   
+      const result = await Board.updateOne(
+         {
+            _id: boardId ,
+            "columns.tasks._id": id,
+         },
+         { $set: { "columns.$[i].tasks.$[j].status": "done" } },
+         {
+            arrayFilters: [
+               { "i._id": columnId },
+               { "j._id": id},
+            ],
+         }
+      );
+      console.log(result)
+   } catch(err) {
+      console.log(err)
+   }
+  
+   
+   // console.log(result);
 }
 
 module.exports = {
