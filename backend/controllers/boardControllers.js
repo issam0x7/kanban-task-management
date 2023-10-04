@@ -88,38 +88,6 @@ async function updateBoard(req, res) {
   }
 }
 
-async function updateTask(req, res) {
-  try {
-    console.log(req.params);
-    const { id, name, columns, taskId } = req.body;
-
-    // // Confirm data
-    // if (!id) {
-    //     return res.status(400).json({ message: 'Board ID required' });
-    // }
-
-    // Confirm board exists to update
-    const board = await Board.findOne({ _id : id ,
-      'columns.tasks._id' :  taskId
-    }, { 'columns.tasks.$': 1 }).exec();
-    console.log(board);
-
-    // if (!board) {
-    //     return res.status(404).json({ message: 'Board not found' });
-    // }
-
-    // // Update board
-    // board.name = name;
-    // board.columns = columns;
-
-    // const updatedBoard = await board.save();
-
-    // res.json(`'${updatedBoard.name}' updated`);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 // @desc Delete a board
 // @route DELETE /api/boards/:id
 // @access Private
@@ -155,5 +123,5 @@ module.exports = {
   getBoards,
   updateBoard,
   deleteBoard,
-  updateTask,
+ 
 };

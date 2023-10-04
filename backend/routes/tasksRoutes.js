@@ -1,9 +1,7 @@
 const router = require("express").Router();
-const { updateTask } = require("../controllers/taskController");
+const { updateTask, addTask } = require("../controllers/taskController");
 
-
-
-
-router.put("/:id", updateTask);
+router.put("/:id", updateTask)
+      .post("/addTask", addTask);
 
 module.exports = router;
