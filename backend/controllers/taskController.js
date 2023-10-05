@@ -100,7 +100,7 @@ async function removeTask (req, res) {
          {
             _id: boardId,
          },
-         { $push: { "columns.$[column].tasks": {_id : id} } },
+         { $pull : { "columns.$[column].tasks": {_id : id} } },
          {
             arrayFilters: [{ "column._id": columnId }],
          }
