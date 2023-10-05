@@ -1,4 +1,5 @@
 
+
 const Board = require("../models/boardModel");
 
 async function updateTask(req, res) {
@@ -46,9 +47,48 @@ async function updateTask(req, res) {
 
 async function addTask(req, res) {
    try {
+      const { boardId, columnId, tasks } = req.body;
+
+      if (!boardId || !columnId || !tasks) {
+         return res
+            .status(400)
+            .json({ success: false, message: "Invalid data provided" });
+      }
+
+      if(typeof tasks !==  "array"){
+         return res
+            .status(400)
+            .json({ success: false, message: "the tasks must be an array" });
+      }
+
+      console.log(boardId, columnId, tasks)
+
+      const result = await Board.updateOne(
+         {
+            _id: boardId,
+         },
+         { $push: { "columns.$[i].tasks":{ $each : [...tasks]}  } },
+         {
+            arrayFilters: [{ "i._id": columnId }],
+         }
+      );
+      if (result.matchedCount === 1) {
+         return res.status(200).json({ message: "The task added ", result });
+      } else {
+         return res.status(404).json({ message: "Document not found", result });
+      }
+   } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+   }
+}
+
+async function removeTask (req, res) {
+   try {
+      const { id } = req.params;
       const { boardId, columnId, task } = req.body;
 
-      if (!boardId || !columnId || !task) {
+      if (!boardId || !columnId) {
          return res
             .status(400)
             .json({ success: false, message: "Invalid data provided" });
@@ -60,9 +100,9 @@ async function addTask(req, res) {
          {
             _id: boardId,
          },
-         { $push: { "columns.$[i].tasks": task } },
+         { $push: { "columns.$[column].tasks": {_id : id} } },
          {
-            arrayFilters: [{ "i._id": columnId }],
+            arrayFilters: [{ "column._id": columnId }],
          }
       );
       if (result.matchedCount === 1) {
@@ -71,12 +111,13 @@ async function addTask(req, res) {
          return res.status(404).json({ message: "Document not found", result });
       }
    } catch (err) {
-      // console.error(err);
-      // return res.status(500).json({ message: "Internal server error" });
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
    }
 }
 
 module.exports = {
    updateTask,
    addTask,
+   removeTask,
 };
