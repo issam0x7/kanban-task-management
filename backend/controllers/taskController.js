@@ -1,5 +1,3 @@
-
-
 const Board = require("../models/boardModel");
 
 async function updateTask(req, res) {
@@ -55,19 +53,19 @@ async function addTask(req, res) {
             .json({ success: false, message: "Invalid data provided" });
       }
 
-      if(typeof tasks !==  "array"){
+      if (typeof tasks !== "array") {
          return res
             .status(400)
             .json({ success: false, message: "the tasks must be an array" });
       }
 
-      console.log(boardId, columnId, tasks)
+      console.log(boardId, columnId, tasks);
 
       const result = await Board.updateOne(
          {
             _id: boardId,
          },
-         { $push: { "columns.$[i].tasks":{ $each : [...tasks]}  } },
+         { $push: { "columns.$[i].tasks": { $each: [...tasks] } } },
          {
             arrayFilters: [{ "i._id": columnId }],
          }
@@ -83,10 +81,51 @@ async function addTask(req, res) {
    }
 }
 
-async function removeTask (req, res) {
+
+async function addSubtask(req, res) {
+   try {
+
+      const { id } = req.params;
+      const { boardId, columnId, tasks } = req.body;
+
+      if (!boardId || !columnId || !subtasks) {
+         return res
+            .status(400)
+            .json({ success: false, message: "Invalid data provided" });
+      }
+
+      if (typeof subtasks !== "array") {
+         return res
+            .status(400)
+            .json({ success: false, message: "the tasks must be an array" });
+      }
+
+      console.log(boardId, columnId, tasks);
+
+      const result = await Board.updateOne(
+         {
+            _id: boardId,
+         },
+         { $push: { "columns.$[i].tasks.$[j]": { $each: [...subtasks] } } },
+         {
+            arrayFilters: [{ "i._id": columnId }, { "j._id": id }],
+         }
+      );
+      if (result.matchedCount === 1) {
+         return res.status(200).json({ message: "The subtask added ", result });
+      } else {
+         return res.status(404).json({ message: "Document not found", result });
+      }
+   } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+   }
+}
+
+async function removeTask(req, res) {
    try {
       const { id } = req.params;
-      const { boardId, columnId, task } = req.body;
+      const { boardId, columnId} = req.body;
 
       if (!boardId || !columnId) {
          return res
@@ -94,13 +133,11 @@ async function removeTask (req, res) {
             .json({ success: false, message: "Invalid data provided" });
       }
 
-      console.log(boardId, columnId, task)
-
       const result = await Board.updateOne(
          {
             _id: boardId,
          },
-         { $pull : { "columns.$[column].tasks": {_id : id} } },
+         { $pull: { "columns.$[column].tasks": { _id: id } } },
          {
             arrayFilters: [{ "column._id": columnId }],
          }
@@ -120,4 +157,5 @@ module.exports = {
    updateTask,
    addTask,
    removeTask,
+   addSubtask,
 };
