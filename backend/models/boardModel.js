@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 
 const taskSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  status: String,
+  title: {type : String, required: true},
+  description: {type : String, required: true},
+  isCompleted: {type : Boolean, required: true},
   subtasks: [
     {
       title: String,
@@ -16,7 +16,6 @@ const taskSchema = new mongoose.Schema({
 const columnSchema = new mongoose.Schema({
   name: String,
   color : String,
-  tasks: [taskSchema],
 });
 
 const boardSchema = new mongoose.Schema({

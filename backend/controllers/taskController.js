@@ -1,12 +1,13 @@
 const Board = require("../models/boardModel");
+const Task = require("../models/taskModel");
 
 async function updateTask(req, res) {
    try {
       const { id } = req.params;
 
-      const { boardId, columnId, task } = req.body;
+      const { task } = req.body;
 
-      if (!boardId || !columnId || !task) {
+      if ( !task) {
          return res
             .status(400)
             .json({ success: false, message: "Invalid data provided" });
@@ -17,18 +18,15 @@ async function updateTask(req, res) {
       // Loop through the fields in the 'task' object and add them to 'updateData'
       for (const key in task) {
          if (task.hasOwnProperty(key)) {
-            updateData[`columns.$[i].tasks.$[j].${key}`] = task[key];
+            updateData[`${key}`] = task[key];
          }
       }
 
-      const result = await Board.updateOne(
+      const result = await Task.updateOne(
          {
-            _id: boardId,
+            _id: id,
          },
          { $set: updateData },
-         {
-            arrayFilters: [{ "i._id": columnId }, { "j._id": id }],
-         }
       );
       if (result.matchedCount === 1) {
          return res
@@ -45,36 +43,55 @@ async function updateTask(req, res) {
 
 async function addTask(req, res) {
    try {
-      const { boardId, columnId, tasks } = req.body;
+      const { columnId, title, description, isCompleted } = req.body;
 
-      if (!boardId || !columnId || !tasks) {
+      if (!columnId) {
          return res
             .status(400)
             .json({ success: false, message: "Invalid data provided" });
       }
 
-      if (typeof tasks !== "array") {
+      const task = new Task({
+         title,
+         description,
+         isCompleted,
+         columnId, 
+      })
+
+      let error =  task.validateSync(); 
+
+      if(error) {
          return res
             .status(400)
-            .json({ success: false, message: "the tasks must be an array" });
+            .json({ success: false, message: "Invalid data provided" });
       }
 
-      console.log(boardId, columnId, tasks);
 
-      const result = await Board.updateOne(
-         {
-            _id: boardId,
-         },
-         { $push: { "columns.$[i].tasks": { $each: [...tasks] } } },
-         {
-            arrayFilters: [{ "i._id": columnId }],
-         }
-      );
-      if (result.matchedCount === 1) {
-         return res.status(200).json({ message: "The task added ", result });
-      } else {
-         return res.status(404).json({ message: "Document not found", result });
-      }
+      task.save();
+
+      return res.status(200).json({ message: "The task added "});
+      // if (typeof tasks !== "array") {
+      //    return res
+      //       .status(400)
+      //       .json({ success: false, message: "the tasks must be an array" });
+      // }
+
+      // console.log(boardId, columnId, tasks);
+
+      // const result = await Board.updateOne(
+      //    {
+      //       _id: boardId,
+      //    },
+      //    { $push: { "columns.$[i].tasks": { $each: [...tasks] } } },
+      //    {
+      //       arrayFilters: [{ "i._id": columnId }],
+      //    }
+      // );
+      // if (result.matchedCount === 1) {
+      //    return res.status(200).json({ message: "The task added ", result });
+      // } else {
+      //    return res.status(404).json({ message: "Document not found", result });
+      // }
    } catch (err) {
       console.error(err);
       return res.status(500).json({ message: "Internal server error" });
@@ -86,30 +103,30 @@ async function addSubtask(req, res) {
    try {
 
       const { id } = req.params;
-      const { boardId, columnId, tasks } = req.body;
+     
+      const { subtasks } = req.body;
 
-      if (!boardId || !columnId || !subtasks) {
+      console.log(subtasks)
+
+      if (!subtasks) {
          return res
             .status(400)
             .json({ success: false, message: "Invalid data provided" });
       }
 
-      if (typeof subtasks !== "array") {
-         return res
-            .status(400)
-            .json({ success: false, message: "the tasks must be an array" });
-      }
+      // if (typeof subtasks !== "array") {
+      //    return res
+      //       .status(400)
+      //       .json({ success: false, message: "the tasks must be an array" });
+      // }
 
-      console.log(boardId, columnId, tasks);
+     
 
-      const result = await Board.updateOne(
+      const result = await Task.updateOne(
          {
-            _id: boardId,
+            _id: id,
          },
-         { $push: { "columns.$[i].tasks.$[j]": { $each: [...subtasks] } } },
-         {
-            arrayFilters: [{ "i._id": columnId }, { "j._id": id }],
-         }
+         { $push:  {"subtasks" :{ $each: [...subtasks] } } },
       );
       if (result.matchedCount === 1) {
          return res.status(200).json({ message: "The subtask added ", result });
