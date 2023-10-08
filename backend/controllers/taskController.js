@@ -142,21 +142,9 @@ async function addSubtask(req, res) {
 async function removeTask(req, res) {
    try {
       const { id } = req.params;
-      const { boardId, columnId} = req.body;
-
-      if (!boardId || !columnId) {
-         return res
-            .status(400)
-            .json({ success: false, message: "Invalid data provided" });
-      }
-
-      const result = await Board.updateOne(
+      const result = await Task.deleteOne(
          {
-            _id: boardId,
-         },
-         { $pull: { "columns.$[column].tasks": { _id: id } } },
-         {
-            arrayFilters: [{ "column._id": columnId }],
+            _id: id,
          }
       );
       if (result.matchedCount === 1) {

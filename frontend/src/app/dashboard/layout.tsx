@@ -14,9 +14,10 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
+
   const boards = await getBoards();
   
-
+  
   return (
     <>
     <ModalProvider />

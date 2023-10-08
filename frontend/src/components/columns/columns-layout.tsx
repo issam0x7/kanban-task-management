@@ -12,7 +12,7 @@ const ColumnsLayout = ({board} : { board :BoardType}) => {
     <div className="p-6 bg-gray-light w-full h-full">
       <DndContext>
         <div className="flex gap-8">
-          {board?.columns?.map((columns : any, id : number) => (
+          {board.columns?.map((columns : any, id : number) => (
             <ColumnCard
               name={columns.name}
               key={id}

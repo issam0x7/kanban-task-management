@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Board = require("../models/boardModel");
 
 // @desc Create a board
@@ -29,15 +30,47 @@ async function createBoard(req, res) {
 async function getBoard(req, res) {
    try {
       const boardId = req.params.id;
-      const board = await Board.findById(boardId).exec();
+      const board = await Board.aggregate([
+         { $match: { _id: new mongoose.Types.ObjectId(boardId) } },
+         { $unwind: "$columns" /* Unwind the columns array*/ },
+         {
+            $lookup: {
+               from: "tasks",
+               /* Name of the tasks collection*/
+               localField: "columns._id",
+               foreignField: "columnId",
+               as: "tasks",
+            },
+         },
+         {
+            $group: {
+               _id: "$_id",
+               name: { $first: "$name" },
+               /* Keep the board name*/
+               columns: {
+                  $push: {
+                     name: "$columns.name",
+                     _id: "$columns._id",
+                     tasks: "$tasks",
+                  },
+               },
+            },
+         },
+         {
+            $replaceRoot: {
+               newRoot: "$$ROOT", // Replace the root with the entire document
+            },
+         },
+      ]);
 
       if (!board) {
          return res.status(404).json({ message: "Board not found" });
       }
 
-      res.json({ board });
+      res.json({ board : board[0] });
    } catch (error) {
-      next(error);
+      // next(error);
+      console.log(error);
    }
 }
 
@@ -47,7 +80,32 @@ async function getBoard(req, res) {
 async function getBoards(req, res) {
    try {
       // Fetch all boards from the database
-      const boards = await Board.find({}).populate("columns").exec();
+      const boards = await Board.aggregate([
+         { $unwind: "$columns" /* Unwind the columns array*/ },
+         {
+            $lookup: {
+               from: "tasks",
+               /* Name of the tasks collection*/
+               localField: "columns._id",
+               foreignField: "columnId",
+               as: "tasks",
+            },
+         },
+         {
+            $group: {
+               _id: "$_id",
+               name: { $first: "$name" },
+               /* Keep the board name*/
+               columns: {
+                  $push: {
+                     name: "$columns.name",
+                     _id: "$columns._id",
+                     tasks: "$tasks",
+                  },
+               },
+            },
+         },
+      ]);
       res.json(boards);
    } catch (error) {
       next(error);
