@@ -10,7 +10,7 @@ const BoardPage =async ({ params }: { params: { boardId: string } }) => {
   const board = await getBoard(params.boardId);
   
   return ( 
-    <ColumnsLayout board={board.board} />
+    <ColumnsLayout boardData={board.board} />
    );
 }
  

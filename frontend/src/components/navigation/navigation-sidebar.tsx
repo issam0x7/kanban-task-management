@@ -17,7 +17,7 @@ interface sidebarProps {
 
 const NavigationSidebar = ({ boards }: sidebarProps) => {
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col">
       <NavigationHeader />
       <nav className="flex flex-col justify-between w-[300px] h-full border-r border-lines  py-8">
         <div className="boards">

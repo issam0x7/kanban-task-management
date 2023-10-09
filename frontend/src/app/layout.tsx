@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans as PalusJakartaSnas } from "next/font/google";
+import { cn } from "@/lib/utils";
 
 const inter = PalusJakartaSnas({
   subsets: ["latin"],
@@ -20,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, "h-screen") }>
         <ThemeProvider attribute="class" >
           {children}
         </ThemeProvider>
