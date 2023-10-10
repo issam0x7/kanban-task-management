@@ -6,14 +6,15 @@ import ColumnHeader, { ColumnHeaderProps } from "./column-header";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 
 interface ColumnCardProps extends ColumnHeaderProps {
+   _id : string;
    tasks: TaskType[];
 }
 
-const ColumnCard = ({ name, color, taskNumber, tasks }: ColumnCardProps) => {
+const ColumnCard = ({ _id ,name, color, taskNumber, tasks }: ColumnCardProps) => {
    return (
       <div className="">
          <ColumnHeader name={name} color="#333" taskNumber={taskNumber} />
-         <Droppable droppableId={name}>
+         <Droppable droppableId={_id}>
             {(provided, snapshot) => (
                <div
                   className="flex flex-col gap-4 min-w-[280px] h-full"

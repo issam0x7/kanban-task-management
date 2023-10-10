@@ -24,7 +24,7 @@ const NavigationSidebar = ({ boards }: sidebarProps) => {
           <h6 className="text-sm px-6">ALL BOARDS </h6>
           <div className="board-list mt-6">
             {boards.map((board) => {
-              return <NavigationItem taskName={board.name} id={board._id} />;
+              return <NavigationItem key={board._id}  taskName={board.name} id={board._id} />;
             })}
 
             <CreateBoardNavigation />

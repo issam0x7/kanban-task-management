@@ -4,13 +4,13 @@
 export  interface BoardType {
   _id : string,
   name : string,
-  columns : ColumnType [] | []
+  columns : ColumnType[] | [],
 }
 
 interface ColumnType {
   name : string,
   _id : string,
-  tasks : TaskType[] | [] | null,
+  tasks : TaskType[] | [] ,
 }
 
 export interface TaskType {
@@ -18,6 +18,7 @@ export interface TaskType {
   title: string, 
   description : string,
   status : string,
+  columnId : string,
   subtasks : SubTasksType [] | [] 
 }
 

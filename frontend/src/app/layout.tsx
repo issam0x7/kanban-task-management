@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans as PalusJakartaSnas } from "next/font/google";

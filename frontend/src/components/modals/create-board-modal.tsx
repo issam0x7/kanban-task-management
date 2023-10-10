@@ -3,7 +3,7 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { api } from "@/lib/api";
+import { apiClient } from "@/lib/api";
 import {
   Dialog,
   DialogContent,
@@ -59,7 +59,7 @@ const CreateBoardModal = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     try {
-      const response = await api.post("/api/boards", values);
+      const response = await apiClient.post("/api/boards", values);
 
       if (response.status === 201) {
         form.reset();
