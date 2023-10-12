@@ -5,13 +5,17 @@ import { create } from "zustand";
 
 
 interface BoardState {
-   board : BoardType ,
+   boards : Map<string, BoardType>  | [],
+   board : BoardType | {} ,
+   setBoards : (boards : Map<string, BoardType> ) => void,
    setBoardState: (board: BoardType) => void ,
    updateTask : (task : TaskType, columnId: string) => void,
 }
 
 export const useBoardState = create<BoardState>((set,get) => ({
-   board : { columns : [], name : "", _id : ""},
+   boards : [],
+   board : {},
+   setBoards : (boards) => set({boards}),
    setBoardState : (board) => set({board}),
    updateTask : async (task, columnId) => {
       await apiClient.put("/api/tasks/" + task._id ,{ task : {...task, columnId : columnId}});

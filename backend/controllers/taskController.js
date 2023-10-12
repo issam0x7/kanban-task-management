@@ -43,7 +43,7 @@ async function updateTask(req, res) {
 
 async function addTask(req, res) {
    try {
-      const { columnId, title, description, isCompleted } = req.body;
+      const { columnId, title, description, subtasks } = req.body;
 
       if (!columnId) {
          return res
@@ -54,8 +54,9 @@ async function addTask(req, res) {
       const task = new Task({
          title,
          description,
-         isCompleted,
-         columnId, 
+         isCompleted : false,
+         columnId,
+         subtasks
       })
 
       let error =  task.validateSync(); 
@@ -69,7 +70,7 @@ async function addTask(req, res) {
 
       task.save();
 
-      return res.status(200).json({ message: "The task added "});
+      return res.status(201).json({ message: "The task added ", task});
       // if (typeof tasks !== "array") {
       //    return res
       //       .status(400)

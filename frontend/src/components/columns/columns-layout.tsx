@@ -14,7 +14,6 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
       updateTask : state.updateTask,
    }));
 
-   console.log(board);
    useEffect(() => {
       setBoradState(boardData);
    }, []);
@@ -62,7 +61,7 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
             return column;
          });
 
-         console.log(newColumns);
+        
 
          setBoradState({ ...board, columns: newColumns });
          updateTask(todoMoved, columnDestinationId)

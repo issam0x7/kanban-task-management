@@ -1,13 +1,14 @@
 
 
+export type ColumnIdType = string;
 
 export  interface BoardType {
   _id : string,
   name : string,
-  columns : ColumnType[] | [],
+  columns : Map<ColumnIdType, ColumnType>,
 }
 
-interface ColumnType {
+export interface ColumnType {
   name : string,
   _id : string,
   tasks : TaskType[] | [] ,
