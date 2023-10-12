@@ -17,6 +17,7 @@ export default async function DashboardLayout({
 
   const boards = await getBoards();
   
+ 
   
   return (
     <>

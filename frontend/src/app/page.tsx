@@ -10,6 +10,7 @@ import {
 import SubTaskCheckBox from "@/components/SubTaskCheckbox";
 import CreateBoardModal from "@/components/modals/create-board-modal";
 import CreateTaskModal from "@/components/modals/create-task-modal";
+import TaskDetailModal from "@/components/modals/task-detail-modal";
 
 export default function Home() {
   return (
@@ -28,7 +29,8 @@ export default function Home() {
       </Select >
       <SubTaskCheckBox label="test" checked={false} /> */}
       {/* <CreateBoardModal /> */}
-      <CreateTaskModal />
+      {/* <CreateTaskModal /> */}
+      <TaskDetailModal />
     </main>
   )
 }

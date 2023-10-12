@@ -8,11 +8,15 @@ import { BoardType } from "@/types/board";
 import { useBoardState } from "@/store/boardStore";
 
 const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
+
    const { board, setBoradState, updateTask } = useBoardState((state) => ({
       board: state.board,
       setBoradState: state.setBoardState,
       updateTask : state.updateTask,
    }));
+
+   const columnsData = Array.from(boardData.columns.values());
+   
 
    useEffect(() => {
       setBoradState(boardData);
@@ -24,15 +28,11 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
       if (!destination) return;
 
       const columnDestinationId = destination.droppableId;
-      const columns = Array.from(board.columns);
-      console.log(columns);
+      const columns = board.columns;
+      
       // console.log(source);
-      const startCol = columns.filter(
-         (col) => col._id === source.droppableId
-      )[0];
-      const finishCol = columns.filter(
-         (col) => col._id === columnDestinationId
-      )[0];
+      const startCol = columns.get(source.droppableId);
+      const finishCol = columns.get(columnDestinationId);
 
       if (!startCol || !finishCol) return;
 
@@ -48,6 +48,7 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
          newTasks.splice(destination.index, 0, todoMoved);
          setBoradState({ ...board, columns });
       } else {
+
          const finishTasks = Array.from(finishCol.tasks);
 
          finishTasks.splice(destination.index, 0, {
@@ -55,11 +56,10 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
             columnId: columnDestinationId,
          });
 
-         const newColumns = columns.map((column) => {
-            if (column._id === columnDestinationId)
-               return { ...column, tasks: finishTasks };
-            return column;
-         });
+         const newCol = { _id : columnDestinationId, name : finishCol.name , tasks : finishTasks}
+         const newColumns =new Map(columns);
+         
+         newColumns.set(columnDestinationId, newCol)
 
         
 
@@ -71,14 +71,14 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
       <div className="p-6 bg-gray-light w-full h-full">
          <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex gap-8">
-               {board?.columns?.map((columns: any, id: number) => (
+               {columnsData.map((column: any, id: number) => (
                   <ColumnCard
-                     name={columns.name}
+                     name={column.name}
                      key={id}
-                     _id={columns._id}
+                     _id={column._id}
                      color="#333"
-                     taskNumber={columns.tasks.length}
-                     tasks={columns.tasks}
+                     taskNumber={column.tasks.length}
+                     tasks={column.tasks}
                   />
                ))}
             </div>

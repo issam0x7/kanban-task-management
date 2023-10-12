@@ -1,9 +1,14 @@
+"use client"
+
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 
 import NavigationHeader from "./navigation-header";
 import NavigationItem from "./navigation-item";
 import CreateBoardNavigation from "./navigation-create-board";
+import { useBoardState } from "@/store/boardStore";
+import { useEffect } from "react";
+import { BoardType } from "@/types/board";
 
 type board = {
   _id: string;
@@ -12,10 +17,18 @@ type board = {
 };
 
 interface sidebarProps {
-  boards: board[];
+  boards: Map<string, BoardType>;
 }
 
 const NavigationSidebar = ({ boards }: sidebarProps) => {
+
+  const { setBoards } = useBoardState(state => ({ setBoards : state.setBoards}));
+
+  useEffect(() => {
+    setBoards(boards);
+    console.log(Array.from(boards.entries()))
+  },[boards])
+
   return (
     <div className="h-full flex flex-col">
       <NavigationHeader />
@@ -23,7 +36,7 @@ const NavigationSidebar = ({ boards }: sidebarProps) => {
         <div className="boards">
           <h6 className="text-sm px-6">ALL BOARDS </h6>
           <div className="board-list mt-6">
-            {boards.map((board) => {
+            {Array.from(boards.values()).map((board) => {
               return <NavigationItem key={board._id}  taskName={board.name} id={board._id} />;
             })}
 

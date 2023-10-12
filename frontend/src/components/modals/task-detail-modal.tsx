@@ -10,6 +10,7 @@ import {
    DialogFooter,
    DialogHeader,
    DialogTitle,
+   DialogDescription,
 } from "../ui/dialog";
 import {
    Form,
@@ -47,12 +48,12 @@ const formSchema = z.object({
    subtasks: z.array(
       z.object({
          title: z.string().min(3),
-         isCompleted : z.boolean()
+         isCompleted: z.boolean(),
       })
    ),
 });
 
-const CreateTaskModal = () => {
+const TaskDetailModal = () => {
    const { board } = useBoardState((state) => ({
       board: state.board,
    }));
@@ -66,7 +67,10 @@ const CreateTaskModal = () => {
       defaultValues: {
          title: "",
          description: "",
-         subtasks: [{ title: "", isCompleted : false }, { title: "", isCompleted : false }],
+         subtasks: [
+            { title: "", isCompleted: false },
+            { title: "", isCompleted: false },
+         ],
       },
    });
 
@@ -75,8 +79,6 @@ const CreateTaskModal = () => {
          name: "subtasks",
          control,
       });
-
-   
 
    async function onSubmit(values: z.infer<typeof formSchema>) {
       // Do something with the form values.
@@ -102,13 +104,18 @@ const CreateTaskModal = () => {
    const isSubmitign = form.formState.isSubmitting;
 
    return (
-      <Dialog open={isModalOpen} onOpenChange={handleClose}>
+      <Dialog open={true} onOpenChange={handleClose}>
          <DialogContent className="border-none py-8 px-8">
             <DialogHeader>
                <DialogTitle className="font-bold text-xl text-black">
-                  Add New Task
+                  Research pricing points of various competitors and trial
+                  different business models
                </DialogTitle>
             </DialogHeader>
+            <DialogDescription>
+               Research pricing points of various competitors and trial
+               different business models
+            </DialogDescription>
             <Form {...form} control={control}>
                <form
                   onSubmit={form.handleSubmit(onSubmit)}
@@ -167,13 +174,16 @@ const CreateTaskModal = () => {
                            key={i}
                            render={({ field }) => {
                               return (
-                              <FormItem>
-                                 <FormControl>
-                                    <Input placeholder="eg test"  {...field}  />
-                                 </FormControl>
-                                 <FormMessage />
-                              </FormItem>
-                              )
+                                 <FormItem>
+                                    <FormControl>
+                                       <Input
+                                          placeholder="eg test"
+                                          {...field}
+                                       />
+                                    </FormControl>
+                                    <FormMessage />
+                                 </FormItem>
+                              );
                            }}
                         />
                      ))}
@@ -182,7 +192,7 @@ const CreateTaskModal = () => {
                         variant="secondary"
                         onClick={(e) => {
                            e.preventDefault();
-                           append({ title: "", isCompleted : false });
+                           append({ title: "", isCompleted: false });
                         }}
                      >
                         + Add new Subtask
@@ -208,14 +218,16 @@ const CreateTaskModal = () => {
                                  </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                 {Array.from(board?.columns.values()).map((column) => (
-                                    <SelectItem
-                                       key={column._id}
-                                       value={column._id}
-                                    >
-                                       {column.name}
-                                    </SelectItem>
-                                 ))}
+                                 {Array.from(board?.columns.values()).map(
+                                    (column) => (
+                                       <SelectItem
+                                          key={column._id}
+                                          value={column._id}
+                                       >
+                                          {column.name}
+                                       </SelectItem>
+                                    )
+                                 )}
                               </SelectContent>
                            </Select>
                            {/* <FormDescription>
@@ -241,4 +253,4 @@ const CreateTaskModal = () => {
    );
 };
 
-export default CreateTaskModal;
+export default TaskDetailModal;
