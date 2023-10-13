@@ -25,7 +25,8 @@ export interface TaskType {
 
 
 interface SubTasksType {
-  title: String,
+  title: string,
   isCompleted: Boolean,
+  _id : string
 }
 

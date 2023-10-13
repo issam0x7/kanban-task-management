@@ -12,15 +12,7 @@ import {
    DialogTitle,
    DialogDescription,
 } from "../ui/dialog";
-import {
-   Form,
-   FormControl,
-   FormDescription,
-   FormField,
-   FormItem,
-   FormLabel,
-   FormMessage,
-} from "../ui/form";
+
 import {
    Select,
    SelectContent,
@@ -28,13 +20,13 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@/components/ui/select";
-import { Input } from "../ui/Input";
-import { Button } from "../ui/button";
-import { X } from "lucide-react";
+
 import { useModal } from "@/hooks/use-modal-store";
-import { Textarea } from "../ui/textarea";
+
 import { useBoardState } from "@/store/boardStore";
 import SubTaskCheckBox from "../SubTaskCheckbox";
+import { ColumnType } from "@/types/board";
+
 
 const formSchema = z.object({
    title: z.string().min(3, {
@@ -55,34 +47,18 @@ const formSchema = z.object({
 });
 
 const TaskDetailModal = () => {
+   
+   
    const { board, task } = useBoardState((state) => ({
       board: state.board,
-      task : state.task
+      task: state.task,
    }));
-
-   console.log(task)
 
    const { isOpen, onClose, type } = useModal();
 
    const isModalOpen = isOpen && type === "taskDetail";
 
-   const { control, ...form } = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-         title: "",
-         description: "",
-         subtasks: [
-            { title: "", isCompleted: false },
-            { title: "", isCompleted: false },
-         ],
-      },
-   });
-
-   const { fields, append, prepend, remove, swap, move, insert, replace } =
-      useFieldArray({
-         name: "subtasks",
-         control,
-      });
+   
 
    async function onSubmit(values: z.infer<typeof formSchema>) {
       // Do something with the form values.
@@ -92,7 +68,7 @@ const TaskDetailModal = () => {
          const response = await apiClient.post("/api/tasks/create", values);
 
          if (response.status === 201) {
-            form.reset();
+            
             onClose();
          }
       } catch (error) {
@@ -100,18 +76,43 @@ const TaskDetailModal = () => {
       }
    }
 
+   async function onChecked(
+      event: React.ChangeEvent<HTMLInputElement>,
+      subtaskID: string
+   ) {}
+
+   async function onStatusChange(
+     value : string
+   ) {
+      try{  
+         // const res = await apiClient.put("/api/tasks/" + task._id , { task : {columnId : value}});
+
+         // if (res.status === 200) {
+            const columns = board.columns;
+            const  currentTaskColumn  = board.columns.get(task.columnId) as ColumnType;
+            const newTasks = currentTaskColumn?.tasks.filter(newTask => newTask._id !== task._id);
+            
+            columns.set(currentTaskColumn?._id, {...currentTaskColumn, tasks : newTasks})
+            
+
+         // }
+         
+      } catch(err) {
+
+      }
+   }
+
    const handleClose = () => {
-      form.reset();
       onClose();
    };
 
-   const isSubmitign = form.formState.isSubmitting;
+   
 
    return (
       <Dialog open={isModalOpen} onOpenChange={handleClose}>
          <DialogContent className="border-none py-8 px-8 gap-8">
             <DialogHeader>
-               <DialogTitle className="font-bold text-xl text-black">
+               <DialogTitle className="font-bold text-xl text-black dark:text-white">
                   Research pricing points of various competitors and trial
                   different business models
                </DialogTitle>
@@ -120,69 +121,42 @@ const TaskDetailModal = () => {
                Research pricing points of various competitors and trial
                different business models
             </DialogDescription>
-            <Form {...form} control={control}>
-               <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8"
-               >
-                  <div className="subtasks-item">
-                     <label className="block text-sm font-medium mb-4"> Subtasks (2 of 3)</label>
-                     <div className="grid gap-2">
-                        <SubTaskCheckBox label="test"  />
-                        <SubTaskCheckBox label="test" />
-                        <SubTaskCheckBox label="test" />
-                     </div>
-                  </div>
 
-                  <FormField
-                     control={control}
-                     name="columnId"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Email</FormLabel>
-                           <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                           >
-                              <FormControl>
-                                 <SelectTrigger>
-                                    <SelectValue
-                                       className="text-foreground"
-                                       placeholder="Select a column"
-                                    />
-                                 </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                 {Array.from(board?.columns.values()).map(
-                                    (column) => (
-                                       <SelectItem
-                                          key={column._id}
-                                          value={column._id}
-                                       >
-                                          {column.name}
-                                       </SelectItem>
-                                    )
-                                 )}
-                              </SelectContent>
-                           </Select>
-                           {/* <FormDescription>
-                              You can manage email addresses in your{" "}
-                              <Link href="/examples/forms">email settings</Link>
-                              .
-                           </FormDescription> */}
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-                  <Button
-                     disabled={isSubmitign}
-                     className="w-full rounded-full"
-                     type="submit"
-                  >
-                     Create New Board
-                  </Button>
-               </form>
-            </Form>
+            <form className="space-y-8">
+               <div className="subtasks-item">
+                  <label className="block text-sm font-medium mb-4">
+                     {" "}
+                     Subtasks (2 of 3)
+                  </label>
+                  <div className="grid gap-2">
+                     {task.subtasks.map((item) => (
+                        <SubTaskCheckBox label={item.title} key={item._id} />
+                     ))}
+                  </div>
+               </div>
+
+               <Select
+                  onValueChange={ onStatusChange}
+                  defaultValue={task.columnId}
+                  
+               >
+                  <SelectTrigger>
+                     <SelectValue
+                        className="text-foreground"
+                        placeholder="Select a column"
+                        
+                     />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                     {Array.from(board?.columns.values()).map((column) => (
+                        <SelectItem key={column._id} value={column._id}>
+                           {column.name}
+                        </SelectItem>
+                     ))}
+                  </SelectContent>
+               </Select>
+            </form>
          </DialogContent>
       </Dialog>
    );

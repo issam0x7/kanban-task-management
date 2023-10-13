@@ -16,7 +16,7 @@ const TaskCard = ({
    return (
       <a
          role="button"
-         className="block p-4  bg-white rounded-md w-[280px] text-left dark:bg-gray-dark"
+         className="block p-4 bg-white rounded-md w-[280px] text-left dark:bg-gray-dark"
          onClick={onClick}
       >
          <h3 className="font-semibold text-base text-black dark:text-white">{name}</h3>
