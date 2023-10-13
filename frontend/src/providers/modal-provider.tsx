@@ -2,6 +2,7 @@
 
 import CreateBoardModal from "@/components/modals/create-board-modal";
 import CreateTaskModal from "@/components/modals/create-task-modal";
+import TaskDetailModal from "@/components/modals/task-detail-modal";
 import { useEffect, useState } from "react";
 
 
@@ -19,6 +20,7 @@ const ModalProvider = () => {
     <>
       <CreateBoardModal />
       <CreateTaskModal />
+      <TaskDetailModal />
     </>
    );
 }

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "createBoard" | "createTask" ;
+export type ModalType = "createBoard" | "createTask" | "taskDetail" ;
 
 interface ModalStore {
   type: ModalType | null;

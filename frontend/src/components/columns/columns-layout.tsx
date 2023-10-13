@@ -68,7 +68,7 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
       }
    };
    return (
-      <div className="p-6 bg-gray-light w-full h-full">
+      <div className="p-6 bg-gray-light w-full h-full dark:bg-gray-dark-1">
          <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex gap-8">
                {columnsData.map((column: any, id: number) => (

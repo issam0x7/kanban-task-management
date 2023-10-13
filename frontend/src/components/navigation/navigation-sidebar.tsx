@@ -26,11 +26,10 @@ const NavigationSidebar = ({ boards }: sidebarProps) => {
 
   useEffect(() => {
     setBoards(boards);
-    console.log(Array.from(boards.entries()))
   },[boards])
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-gray-dark">
       <NavigationHeader />
       <nav className="flex flex-col justify-between w-[300px] h-full border-r border-lines  py-8">
         <div className="boards">

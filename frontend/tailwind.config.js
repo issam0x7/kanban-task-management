@@ -55,6 +55,7 @@ module.exports = {
         },
         gray : {
           light: "hsl(var(--light-gray))",
+          medium : "hsl(var(--medium-gray))",
           dark : "hsl(var(--dark-gray))",
           "dark-1" : "hsl(var(--very-dark-gray))"
         }

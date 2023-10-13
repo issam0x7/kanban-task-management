@@ -18,7 +18,7 @@ export interface TaskType {
   _id : string,
   title: string, 
   description : string,
-  status : string,
+  isCompleted : boolean,
   columnId : string,
   subtasks : SubTasksType [] | [] 
 }

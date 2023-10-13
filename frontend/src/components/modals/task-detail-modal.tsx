@@ -34,6 +34,7 @@ import { X } from "lucide-react";
 import { useModal } from "@/hooks/use-modal-store";
 import { Textarea } from "../ui/textarea";
 import { useBoardState } from "@/store/boardStore";
+import SubTaskCheckBox from "../SubTaskCheckbox";
 
 const formSchema = z.object({
    title: z.string().min(3, {
@@ -54,13 +55,16 @@ const formSchema = z.object({
 });
 
 const TaskDetailModal = () => {
-   const { board } = useBoardState((state) => ({
+   const { board, task } = useBoardState((state) => ({
       board: state.board,
+      task : state.task
    }));
+
+   console.log(task)
 
    const { isOpen, onClose, type } = useModal();
 
-   const isModalOpen = isOpen && type === "createTask";
+   const isModalOpen = isOpen && type === "taskDetail";
 
    const { control, ...form } = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -104,15 +108,15 @@ const TaskDetailModal = () => {
    const isSubmitign = form.formState.isSubmitting;
 
    return (
-      <Dialog open={true} onOpenChange={handleClose}>
-         <DialogContent className="border-none py-8 px-8">
+      <Dialog open={isModalOpen} onOpenChange={handleClose}>
+         <DialogContent className="border-none py-8 px-8 gap-8">
             <DialogHeader>
                <DialogTitle className="font-bold text-xl text-black">
                   Research pricing points of various competitors and trial
                   different business models
                </DialogTitle>
             </DialogHeader>
-            <DialogDescription>
+            <DialogDescription className="text-base">
                Research pricing points of various competitors and trial
                different business models
             </DialogDescription>
@@ -121,82 +125,13 @@ const TaskDetailModal = () => {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-8"
                >
-                  <FormField
-                     control={control}
-                     name="title"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Title :</FormLabel>
-                           <FormControl>
-                              <Input placeholder="eg test" {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-
-                  <FormField
-                     control={control}
-                     name="description"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Description :</FormLabel>
-                           <FormControl>
-                              <Textarea placeholder="eg test" {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-                  <div className="flex flex-col gap-3">
-                     <label htmlFor="" className="text-sm font-medium">
-                        Board Columns :
-                     </label>
-                     {fields.map((item, i) => (
-                        // <div className="flex items-center" key={i}>
-                        //    <Input
-                        //       type="text"
-                        //       {...form.register(`subTasks.${i}.name`)}
-                        //       placeholder="e.g. Make coffee"
-                        //    />
-                        //    <Button
-                        //       className="pe-0"
-                        //       size="sm"
-                        //       variant="transparent"
-                        //       onClick={() => remove(i)}
-                        //    >
-                        //       <X />
-                        //    </Button>
-                        // </div>
-                        <FormField
-                           control={control}
-                           name={`subtasks.${i}.title`}
-                           key={i}
-                           render={({ field }) => {
-                              return (
-                                 <FormItem>
-                                    <FormControl>
-                                       <Input
-                                          placeholder="eg test"
-                                          {...field}
-                                       />
-                                    </FormControl>
-                                    <FormMessage />
-                                 </FormItem>
-                              );
-                           }}
-                        />
-                     ))}
-                     <Button
-                        className="w-full rounded-full"
-                        variant="secondary"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           append({ title: "", isCompleted: false });
-                        }}
-                     >
-                        + Add new Subtask
-                     </Button>
+                  <div className="subtasks-item">
+                     <label className="block text-sm font-medium mb-4"> Subtasks (2 of 3)</label>
+                     <div className="grid gap-2">
+                        <SubTaskCheckBox label="test"  />
+                        <SubTaskCheckBox label="test" />
+                        <SubTaskCheckBox label="test" />
+                     </div>
                   </div>
 
                   <FormField

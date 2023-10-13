@@ -16,7 +16,6 @@ const BoardLayout = ({boardId}: {boardId :string}) => {
    
 
    useEffect(() => {
-      console.log(boards.get(boardId))
       setBoard(boards.get(boardId) || {_id : "", name : "", columns : new Map()});
    }, [boardId, boards]);
 
