@@ -25,7 +25,7 @@ import { useModal } from "@/hooks/use-modal-store";
 
 import { useBoardState } from "@/store/boardStore";
 import SubTaskCheckBox from "../SubTaskCheckbox";
-import { ColumnType } from "@/types/board";
+import { ColumnType, TaskType } from "@/types/board";
 
 
 const formSchema = z.object({
@@ -49,9 +49,10 @@ const formSchema = z.object({
 const TaskDetailModal = () => {
    
    
-   const { board, task } = useBoardState((state) => ({
+   const { board, task, setBoardState } = useBoardState((state) => ({
       board: state.board,
       task: state.task,
+      setBoardState : state.setBoardState,
    }));
 
    const { isOpen, onClose, type } = useModal();
@@ -85,17 +86,28 @@ const TaskDetailModal = () => {
      value : string
    ) {
       try{  
-         // const res = await apiClient.put("/api/tasks/" + task._id , { task : {columnId : value}});
+         const res = await apiClient.put("/api/tasks/" + task._id , { task : {columnId : value}});
 
-         // if (res.status === 200) {
+         if (res.status === 200) {
             const columns = board.columns;
-            const  currentTaskColumn  = board.columns.get(task.columnId) as ColumnType;
-            const newTasks = currentTaskColumn?.tasks.filter(newTask => newTask._id !== task._id);
-            
-            columns.set(currentTaskColumn?._id, {...currentTaskColumn, tasks : newTasks})
-            
 
-         // }
+            console.log(columns)
+            const  currentColumn  = board.columns.get(task.columnId) as ColumnType;
+            const targetCoulumn = board.columns.get(value) as ColumnType;
+            
+            
+            const currentColumnTasks = currentColumn?.tasks.filter(newTask => newTask._id !== task._id);
+            const targetColumnTasks = targetCoulumn?.tasks as TaskType[] ;
+            targetColumnTasks?.push({...task, columnId : value})
+            
+            columns.set(currentColumn?._id, {...currentColumn, tasks : currentColumnTasks})
+            
+            columns.set(value, {...targetCoulumn, tasks : targetColumnTasks });
+            
+            console.log(columns)
+            setBoardState({...board, columns});
+
+         }
          
       } catch(err) {
 
