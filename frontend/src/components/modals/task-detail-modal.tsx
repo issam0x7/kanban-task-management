@@ -26,6 +26,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { useBoardState } from "@/store/boardStore";
 import SubTaskCheckBox from "../SubTaskCheckbox";
 import { ColumnType, TaskType } from "@/types/board";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 
 const formSchema = z.object({
@@ -59,8 +60,6 @@ const TaskDetailModal = () => {
 
    const isModalOpen = isOpen && type === "taskDetail";
 
-   
-
    async function onSubmit(values: z.infer<typeof formSchema>) {
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
@@ -78,9 +77,11 @@ const TaskDetailModal = () => {
    }
 
    async function onChecked(
-      event: React.ChangeEvent<HTMLInputElement>,
-      subtaskID: string
-   ) {}
+     checkedState : CheckedState,
+     subtaskID : string
+   ) {
+      
+   }
 
    async function onStatusChange(
      value : string
@@ -142,7 +143,7 @@ const TaskDetailModal = () => {
                   </label>
                   <div className="grid gap-2">
                      {task.subtasks.map((item) => (
-                        <SubTaskCheckBox label={item.title} key={item._id} />
+                        <SubTaskCheckBox label={item.title} key={item._id} onCheckedChange={(checkedState) => onChecked(checkedState,item._id)} />
                      ))}
                   </div>
                </div>

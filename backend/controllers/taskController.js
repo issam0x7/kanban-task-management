@@ -1,4 +1,3 @@
-const Board = require("../models/boardModel");
 const Task = require("../models/taskModel");
 
 async function updateTask(req, res) {
@@ -7,7 +6,7 @@ async function updateTask(req, res) {
 
       const { task } = req.body;
 
-      if ( !task) {
+      if (!task) {
          return res
             .status(400)
             .json({ success: false, message: "Invalid data provided" });
@@ -26,7 +25,7 @@ async function updateTask(req, res) {
          {
             _id: id,
          },
-         { $set: updateData },
+         { $set: updateData }
       );
       if (result.matchedCount === 1) {
          return res
@@ -54,23 +53,22 @@ async function addTask(req, res) {
       const task = new Task({
          title,
          description,
-         isCompleted : false,
+         isCompleted: false,
          columnId,
-         subtasks
-      })
+         subtasks,
+      });
 
-      let error =  task.validateSync(); 
+      let error = task.validateSync();
 
-      if(error) {
+      if (error) {
          return res
             .status(400)
             .json({ success: false, message: "Invalid data provided" });
       }
 
-
       task.save();
 
-      return res.status(201).json({ message: "The task added ", task});
+      return res.status(201).json({ message: "The task added ", task });
       // if (typeof tasks !== "array") {
       //    return res
       //       .status(400)
@@ -99,15 +97,30 @@ async function addTask(req, res) {
    }
 }
 
+async function removeTask(req, res) {
+   try {
+      const { id } = req.params;
+      const result = await Task.deleteOne({
+         _id: id,
+      });
+      if (result.matchedCount === 1) {
+         return res.status(200).json({ message: "The task added ", result });
+      } else {
+         return res.status(404).json({ message: "Document not found", result });
+      }
+   } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+   }
+}
 
 async function addSubtask(req, res) {
    try {
-
       const { id } = req.params;
-     
+
       const { subtasks } = req.body;
 
-      console.log(subtasks)
+      console.log(subtasks);
 
       if (!subtasks) {
          return res
@@ -115,19 +128,11 @@ async function addSubtask(req, res) {
             .json({ success: false, message: "Invalid data provided" });
       }
 
-      // if (typeof subtasks !== "array") {
-      //    return res
-      //       .status(400)
-      //       .json({ success: false, message: "the tasks must be an array" });
-      // }
-
-     
-
       const result = await Task.updateOne(
          {
             _id: id,
          },
-         { $push:  {"subtasks" :{ $each: [...subtasks] } } },
+         { $push: { subtasks: { $each: [...subtasks] } } }
       );
       if (result.matchedCount === 1) {
          return res.status(200).json({ message: "The subtask added ", result });
@@ -140,16 +145,31 @@ async function addSubtask(req, res) {
    }
 }
 
-async function removeTask(req, res) {
+async function updateSubtask(req, res) {
    try {
       const { id } = req.params;
-      const result = await Task.deleteOne(
+
+      const { subtasks } = req.body;
+
+      console.log(subtasks);
+
+      if (!subtasks && !subtasks?._id) {
+         return res
+            .status(400)
+            .json({ success: false, message: "Invalid data provided" });
+      }
+
+      const result = await Task.updateOne(
          {
             _id: id,
+         },
+         { $set : {"subtasks.$[i]" : { $set : {...subtasks}} }   } ,
+         {
+            arrayFilters: [{ "i._id": subtasks._id }],
          }
       );
       if (result.matchedCount === 1) {
-         return res.status(200).json({ message: "The task added ", result });
+         return res.status(200).json({ message: "The subtask added ", result });
       } else {
          return res.status(404).json({ message: "Document not found", result });
       }
@@ -164,4 +184,5 @@ module.exports = {
    addTask,
    removeTask,
    addSubtask,
+   updateSubtask,
 };
