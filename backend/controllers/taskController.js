@@ -159,11 +159,16 @@ async function updateSubtask(req, res) {
             .json({ success: false, message: "Invalid data provided" });
       }
 
+      const update = Object.fromEntries(
+         Object.entries(subtasks)
+         .map(([key, value]) => [`subtasks.$[i].${key}`, value])
+      );
+
       const result = await Task.updateOne(
          {
             _id: id,
          },
-         { $set : {"subtasks.$[i]" : { $set : {...subtasks}} }   } ,
+         { $set: update },
          {
             arrayFilters: [{ "i._id": subtasks._id }],
          }

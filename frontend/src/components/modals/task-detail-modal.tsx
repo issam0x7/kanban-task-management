@@ -28,98 +28,92 @@ import SubTaskCheckBox from "../SubTaskCheckbox";
 import { ColumnType, TaskType } from "@/types/board";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
-
-const formSchema = z.object({
-   title: z.string().min(3, {
-      message: "Task title is required ",
-   }),
-   description: z.string().min(3, {
-      message: "Task description is required ",
-   }),
-   columnId: z.string().min(3, {
-      message: "Column is required ",
-   }),
-   subtasks: z.array(
-      z.object({
-         title: z.string().min(3),
-         isCompleted: z.boolean(),
-      })
-   ),
-});
-
 const TaskDetailModal = () => {
-   
-   
    const { board, task, setBoardState } = useBoardState((state) => ({
       board: state.board,
       task: state.task,
-      setBoardState : state.setBoardState,
+      setBoardState: state.setBoardState,
    }));
 
    const { isOpen, onClose, type } = useModal();
 
    const isModalOpen = isOpen && type === "taskDetail";
 
-   async function onSubmit(values: z.infer<typeof formSchema>) {
-      // Do something with the form values.
-      // ✅ This will be type-safe and validated.
-      console.log(values);
+   async function onChecked(checkedState: CheckedState, subtaskID: string) {
       try {
-         const response = await apiClient.post("/api/tasks/create", values);
+         const res = await apiClient.put(`/api/tasks/${task._id}/subtasks`, {
+            subtasks: { _id: subtaskID, isCompleted: checkedState },
+         });
 
-         if (response.status === 201) {
-            
-            onClose();
+         if (res.status === 200) {
+            const columns = board.columns;
+            const currentColumn = board.columns.get(
+               task.columnId
+            ) as ColumnType;
+            const newTasks = currentColumn.tasks.map((taskItem) => {
+               if (task._id === taskItem._id) {
+                  return {
+                     ...taskItem,
+                     subtasks: taskItem.subtasks.map((subTask) => {
+                        if (subTask._id === subtaskID) {
+                           return {
+                              ...subTask,
+                              isCompleted: checkedState as boolean,
+                           };
+                        }
+                        return subTask;
+                     }),
+                  };
+               }
+               return taskItem;
+            });
+
+            columns.set(task.columnId, { ...currentColumn, tasks: newTasks });
+
+            setBoardState({ ...board, columns });
          }
-      } catch (error) {
-         throw new Error("Network Error");
+      } catch (err) {
+         console.log(err);
       }
    }
 
-   async function onChecked(
-     checkedState : CheckedState,
-     subtaskID : string
-   ) {
-      
-   }
-
-   async function onStatusChange(
-     value : string
-   ) {
-      try{  
-         const res = await apiClient.put("/api/tasks/" + task._id , { task : {columnId : value}});
+   async function onStatusChange(value: string) {
+      try {
+         const res = await apiClient.put("/api/tasks/" + task._id, {
+            task: { columnId: value },
+         });
 
          if (res.status === 200) {
             const columns = board.columns;
 
-            console.log(columns)
-            const  currentColumn  = board.columns.get(task.columnId) as ColumnType;
+            const currentColumn = board.columns.get(
+               task.columnId
+            ) as ColumnType;
             const targetCoulumn = board.columns.get(value) as ColumnType;
-            
-            
-            const currentColumnTasks = currentColumn?.tasks.filter(newTask => newTask._id !== task._id);
-            const targetColumnTasks = targetCoulumn?.tasks as TaskType[] ;
-            targetColumnTasks?.push({...task, columnId : value})
-            
-            columns.set(currentColumn?._id, {...currentColumn, tasks : currentColumnTasks})
-            
-            columns.set(value, {...targetCoulumn, tasks : targetColumnTasks });
-            
-            console.log(columns)
-            setBoardState({...board, columns});
 
+            const currentColumnTasks = currentColumn?.tasks.filter(
+               (newTask) => newTask._id !== task._id
+            );
+            const targetColumnTasks = targetCoulumn?.tasks as TaskType[];
+            targetColumnTasks?.push({ ...task, columnId: value });
+
+            columns.set(currentColumn?._id, {
+               ...currentColumn,
+               tasks: currentColumnTasks,
+            });
+
+            columns.set(value, { ...targetCoulumn, tasks: targetColumnTasks });
+
+            setBoardState({ ...board, columns });
          }
-         
-      } catch(err) {
-
+      } catch (err) {
+         console.log(err);
       }
    }
 
    const handleClose = () => {
       onClose();
    };
-
-   
 
    return (
       <Dialog open={isModalOpen} onOpenChange={handleClose}>
@@ -143,21 +137,26 @@ const TaskDetailModal = () => {
                   </label>
                   <div className="grid gap-2">
                      {task.subtasks.map((item) => (
-                        <SubTaskCheckBox label={item.title} key={item._id} onCheckedChange={(checkedState) => onChecked(checkedState,item._id)} />
+                        <SubTaskCheckBox
+                           label={item.title}
+                           key={item._id}
+                           onCheckedChange={(checkedState) =>
+                              onChecked(checkedState, item._id)
+                           }
+                           checked={!!item.isCompleted}
+                        />
                      ))}
                   </div>
                </div>
 
                <Select
-                  onValueChange={ onStatusChange}
+                  onValueChange={onStatusChange}
                   defaultValue={task.columnId}
-                  
                >
                   <SelectTrigger>
                      <SelectValue
                         className="text-foreground"
                         placeholder="Select a column"
-                        
                      />
                   </SelectTrigger>
 
