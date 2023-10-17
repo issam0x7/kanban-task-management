@@ -81,7 +81,7 @@ const CreateBoardModal = () => {
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="border-none py-8 px-8">
         <DialogHeader>
-          <DialogTitle className="font-bold text-xl text-black">
+          <DialogTitle className="font-bold text-xl text-black dark:text-white">
             Add New Board
           </DialogTitle>
         </DialogHeader>

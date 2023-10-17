@@ -38,7 +38,7 @@ const ColumnCard = ({
          <Droppable droppableId={_id}>
             {(provided, snapshot) => (
                <div
-                  className="flex flex-col gap-4 min-w-[280px] h-full"
+                  className="flex flex-col gap-4 min-w-[280px] pb-8"
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                >

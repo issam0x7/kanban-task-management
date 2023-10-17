@@ -10,7 +10,7 @@ export default async function BoardLayout({
   return (
   
    
-    <div className="h-screen flex flex-col w-full">
+    <div className="flex flex-col w-full">
      
       {children}
     </div>

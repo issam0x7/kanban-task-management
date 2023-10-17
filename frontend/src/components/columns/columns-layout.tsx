@@ -6,6 +6,7 @@ import ColumnCard from "./column-card";
 
 import { BoardType } from "@/types/board";
 import { useBoardState } from "@/store/boardStore";
+import BtnNewColumn from "./btn-new-column";
 
 const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
 
@@ -68,9 +69,9 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
       }
    };
    return (
-      <div className="p-6 bg-gray-light w-full h-full dark:bg-gray-dark-1">
+      <div className="p-6 bg-gray-light w-full h-full flex-shrink  dark:bg-gray-dark-1">
          <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-8">
+            <div className="flex gap-8 h-full pt-[-1px]">
                {columnsData.map((column: any, id: number) => (
                   <ColumnCard
                      name={column.name}
@@ -81,6 +82,7 @@ const ColumnsLayout = ({ boardData }: { boardData: BoardType }) => {
                      tasks={column.tasks}
                   />
                ))}
+               <BtnNewColumn />
             </div>
          </DragDropContext>
       </div>
