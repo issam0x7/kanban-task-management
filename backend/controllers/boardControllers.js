@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Board = require("../models/boardModel");
+const Task = require("../models/taskModel");
 
 // @desc Create a board
 // @route POST /api/boards
@@ -67,7 +68,7 @@ async function getBoard(req, res) {
          return res.status(404).json({ message: "Board not found" });
       }
 
-      res.json({ board : board[0] });
+      res.json({ board: board[0] });
    } catch (error) {
       // next(error);
       console.log(error);
@@ -172,10 +173,94 @@ async function deleteBoard(req, res) {
    }
 }
 
+async function updateBoardCloumns(req, res) {
+   try {
+      const { id } = req.params;
+
+      const { name, columns } = req.body;
+
+      // Confirm data
+      if (!id) {
+         return res.status(400).json({ message: "Board ID required" });
+      }
+
+      // Confirm board exists to update
+      const board = await Board.findById(id).exec();
+
+      if (!board) {
+         return res.status(404).json({ message: "Board not found" });
+      }
+
+      board.name = name;
+
+      const colIds = Array.from(board.columns.map((col) => col._id.toString()));
+
+      columns.forEach((col) => {
+         const isExist = colIds.includes(col._id);
+         if (isExist) {
+            board.columns.forEach((column) => {
+               if (column._id.toString() === col?._id) {
+                  column.name = col.name;
+                  return;
+               }
+            });
+         } else {
+            board.columns.push(col);
+         }
+      });
+
+      const updatedBoard = await board.save();
+
+      res.json({ message: `'${updatedBoard.name}' updated`, board: board });
+   } catch (error) {
+      // next(error);
+      console.log(error);
+   }
+}
+
+async function deleteColumn(req, res) {
+   try {
+      const { id } = req.params;
+
+      const { column } = req.body;
+      // Confirm data
+      if (!id && !column?._id) {
+         return res.status(400).json({ message: "Board ID required" });
+      }
+
+      // Confirm board exists to delete
+      const result = await Board.updateOne(
+         {
+            _id: id,
+         },
+         { $pull: { columns: { _id: column._id } } }
+      ).exec();
+
+      const removeReslut = await Task.deleteMany(
+        { "columnId" : column._id}
+      ).exec();
+
+      // if (!board) {
+      //    return res.status(404).json({ message: "Board not found" });
+      // }
+
+      // const result = await board.deleteOne();
+
+      // const reply = `Board '${result.name}' with ID ${result._id} deleted`;
+
+      res.json({result, removeReslut});
+   } catch (error) {
+      // next(error);
+      console.log(error);
+   }
+}
+
 module.exports = {
    createBoard,
    getBoard,
    getBoards,
    updateBoard,
    deleteBoard,
+   updateBoardCloumns,
+   deleteColumn
 };

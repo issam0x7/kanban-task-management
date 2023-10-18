@@ -5,12 +5,16 @@ const {
     getBoards,
     updateBoard,
     deleteBoard,
+    updateBoardCloumns,
+    deleteColumn,
 } = require('../controllers/boardControllers');
 
 router.get('/', getBoards)
     .post('/', createBoard)
     .get('/:id', getBoard)
     .put('/:id', updateBoard)
-    .delete('/:id', deleteBoard);
+    .put('/:id/columns', updateBoardCloumns)
+    .delete('/:id', deleteBoard)
+    .delete('/:id/columns', deleteColumn)
 
 module.exports = router;
