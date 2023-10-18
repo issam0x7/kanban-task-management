@@ -39,6 +39,9 @@ const TaskDetailModal = () => {
 
    const isModalOpen = isOpen && type === "taskDetail";
 
+   const subtaskLength = task.subtasks.length;
+   const completedSubtaskLength = task.subtasks.filter(subtask => subtask.isCompleted).length
+
    async function onChecked(checkedState: CheckedState, subtaskID: string) {
       try {
          const res = await apiClient.put(`/api/tasks/${task._id}/subtasks`, {
@@ -133,7 +136,7 @@ const TaskDetailModal = () => {
                <div className="subtasks-item">
                   <label className="block text-sm font-medium mb-4">
                      {" "}
-                     Subtasks (2 of 3)
+                     Subtasks ({completedSubtaskLength} of {subtaskLength})
                   </label>
                   <div className="grid gap-2">
                      {task.subtasks.map((item) => (

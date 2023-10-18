@@ -1,3 +1,4 @@
+import { getBoard, getBoards } from "@/api/boards";
 import { apiClient } from "@/lib/api";
 import { BoardType, TaskType } from "@/types/board";
 import { create } from "zustand";
@@ -10,6 +11,7 @@ interface BoardState {
    task : TaskType,
    setBoards : (boards : Map<string, BoardType>  ) => void,
    setBoardState: (board: BoardType) => void ,
+   getBoardsRequest: () => void ,
    updateTask : (task : TaskType, columnId: string) => void,
    setTask : (task : TaskType) => void,
 }
@@ -20,6 +22,10 @@ export const useBoardState = create<BoardState>((set,get) => ({
    task : {_id : "" , title : "", description : "", subtasks : [], columnId : "", isCompleted : false},
    setBoards : (boards) => set({boards}),
    setBoardState : (board) => set({board}),
+   getBoardsRequest: async () => {
+      const boardsMap = await getBoards();
+      return  set({boards : boardsMap});
+   } ,
    updateTask : async (task, columnId) => {
       await apiClient.put("/api/tasks/" + task._id ,{ task : {...task, columnId : columnId}});
    },

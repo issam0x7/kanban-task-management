@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "createBoard" | "createTask" | "taskDetail" ;
+export type ModalType = "createBoard" | "createTask" | "taskDetail" | "editBoard" ;
 
 interface ModalStore {
   type: ModalType | null;
@@ -12,6 +12,6 @@ interface ModalStore {
 export const useModal = create<ModalStore>((set) => ({
   type: null,
   isOpen: false,
-  setIsOpen: (type) => set({ isOpen: true, type}),
-  onClose: () => set((state) => ({ isOpen: false, type : null })),
+  setIsOpen: (type) => set(() => ({ isOpen: true,type : type})),
+  onClose: () => set(() => ({ isOpen: false, type : null })),
 }));

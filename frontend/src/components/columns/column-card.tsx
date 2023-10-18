@@ -32,6 +32,7 @@ const ColumnCard = ({
       setTask(task)
    };
 
+
    return (
       <div className="">
          <ColumnHeader name={name} color="#333" taskNumber={taskNumber} />
@@ -57,7 +58,7 @@ const ColumnCard = ({
                               <TaskCard
                                  name={task.title}
                                  subTaskNumber={task.subtasks?.length}
-                                 subTaskCompletedNumber={2}
+                                 subTaskCompletedNumber={task.subtasks.filter(subtask => subtask.isCompleted).length}
                                  onClick={(e : React.MouseEvent<HTMLAnchorElement>) => handleCardClick(e, task)}
                               />
                            </div>
