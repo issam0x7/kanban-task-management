@@ -1,18 +1,20 @@
 'use client';
 
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { apiClient } from '@/lib/api';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/button';
 import { X } from 'lucide-react';
 import { useModal } from '@/hooks/use-modal-store';
 import { Textarea } from '../ui/textarea';
 import { useBoardState } from '@/store/boardStore';
+
+import Select from 'react-select';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
     title: z.string().min(3, {
@@ -33,9 +35,9 @@ const formSchema = z.object({
 });
 
 const CreateTaskModal = () => {
-   //  const { board } = useBoardState((state) => ({
-   //      board: state.board,
-   //  }));
+    const { board } = useBoardState((state) => ({
+        board: state.board,
+    }));
 
     const { isOpen, onClose, type } = useModal();
 
@@ -51,7 +53,7 @@ const CreateTaskModal = () => {
                 { title: '', isCompleted: false },
             ],
         },
-        mode : "onChange"
+        mode: 'onChange',
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -81,9 +83,11 @@ const CreateTaskModal = () => {
 
     const isSubmitign = form.formState.isSubmitting;
 
-
-   //  const selectItems = Array.from(board.columns.entries()).map(([id, value]) => (<SelectItem key={id} value={id}> {value.name}</SelectItem>));
-    
+    type OptionType = { readonly label: string; readonly value: string };
+    const optionsValues: readonly OptionType[] = Array.from(board.columns.entries()).map(([id, value]) => ({
+        label: value.name,
+        value: value._id,
+    }));
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleClose}>
@@ -91,98 +95,124 @@ const CreateTaskModal = () => {
                 <DialogHeader>
                     <DialogTitle className="font-bold text-xl text-black dark:text-white">Add New Task</DialogTitle>
                 </DialogHeader>
-                <Form {...form} control={control}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                        <FormField
-                            control={control}
-                            name="title"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Title :</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="eg test" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description :</FormLabel>
-                                    <FormControl>
-                                        <Textarea placeholder="eg test" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="flex flex-col gap-3">
-                            <label htmlFor="" className="text-sm font-medium">
-                                Board Columns :
-                            </label>
-                            {fields.map((item, i) => (
-                                <FormField
-                                    control={control}
-                                    name={`subtasks.${i}.title`}
-                                    key={i}
-                                    render={({ field }) => {
-                                        return (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input placeholder="eg test" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        );
-                                    }}
-                                />
-                            ))}
-                            <Button
-                                className="w-full rounded-full"
-                                variant="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    append({ title: '', isCompleted: false });
-                                }}
-                            >
-                                + Add new Subtask
-                            </Button>
-                        </div>
-
-                        <FormField
-                            control={control}
-                            name="columnId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Status : </FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                {isModalOpen && (
+                    <Form {...form} control={control}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                                control={control}
+                                name="title"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Title :</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue
-                                                    className="text-foreground"
-                                                    placeholder="Select a column"
-                                                />
-                                            </SelectTrigger>
+                                            <Input placeholder="eg test" {...field} />
                                         </FormControl>
-                                        <SelectContent>
-                                           {/* {selectItems} */}
-                                           <SelectItem value="lasjfdla"> test</SelectItem>
-                                           <SelectItem value="oajsdn">test </SelectItem>
-                                           <SelectItem value="flsafdo">test </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormItem>
-                            )}
-                        />
-                        <Button disabled={isSubmitign} className="w-full rounded-full" type="submit">
-                            Create New Board
-                        </Button>
-                    </form>
-                </Form>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description :</FormLabel>
+                                        <FormControl>
+                                            <Textarea placeholder="eg test" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="flex flex-col gap-3">
+                                <label htmlFor="" className="text-sm font-medium">
+                                    Board Columns :
+                                </label>
+                                {fields.map((item, i) => (
+                                    <FormField
+                                        control={control}
+                                        name={`subtasks.${i}.title`}
+                                        key={i}
+                                        render={({ field }) => {
+                                            return (
+                                                <FormItem>
+                                                    <FormControl>
+                                                        <div className="flex">
+                                                            <Input placeholder="eg test" {...field} />
+                                                            <Button
+                                                                className="pe-0"
+                                                                size="sm"
+                                                                variant="transparent"
+                                                                onClick={(): void => remove(i)}
+                                                            >
+                                                                <X />
+                                                            </Button>
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            );
+                                        }}
+                                    />
+                                ))}
+                                <Button
+                                    className="w-full rounded-full"
+                                    variant="secondary"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        append({ title: '', isCompleted: false });
+                                    }}
+                                >
+                                    + Add new Subtask
+                                </Button>
+                            </div>
+
+                            <FormField
+                                control={control}
+                                name="columnId"
+                                render={({ field: { onChange, onBlur, value, ref } }) => (
+                                    <FormItem>
+                                        <FormLabel>Status : </FormLabel>
+
+                                        <FormControl>
+                                            <Select
+                                                onChange={(val) => onChange(val?.value)}
+                                                options={optionsValues}
+                                                value={optionsValues.find((c) => c.value === value)}
+                                                ref={ref}
+                                                onBlur={onBlur}
+                                                classNames={{
+                                                    control: (state) =>
+                                                        cn(
+                                                            'flex h-12 w-full rounded border border-input bg-transparent px-3 text-base ring-offset-border placeholder:text-muted-foreground text-muted-foreground dark:focus-visible:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+                                                            state.isFocused
+                                                                ? 'outline-none ring-1 ring-ring text-black'
+                                                                : '',
+                                                        ),
+                                                }}
+                                                styles={{
+                                                    control: () => ({}),
+                                                    option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+                                                        ...styles,
+                                                        backgroundColor: isFocused
+                                                            ? 'hsl(var(--primary))'
+                                                            : 'transparent',
+                                                        color: isFocused ? '#fff' : styles.color,
+                                                    }),
+                                                }}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <Button disabled={isSubmitign} className="w-full rounded-full" type="submit">
+                                Create New Board
+                            </Button>
+                        </form>
+                    </Form>
+                )}
             </DialogContent>
         </Dialog>
     );
