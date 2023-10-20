@@ -222,9 +222,9 @@ async function deleteColumn(req, res) {
    try {
       const { id } = req.params;
 
-      const { column } = req.body;
+      const { _id } = req.body;
       // Confirm data
-      if (!id && !column?._id) {
+      if (!id && _id) {
          return res.status(400).json({ message: "Board ID required" });
       }
 
@@ -233,11 +233,11 @@ async function deleteColumn(req, res) {
          {
             _id: id,
          },
-         { $pull: { columns: { _id: column._id } } }
+         { $pull: { columns: { _id: _id } } }
       ).exec();
 
       const removeReslut = await Task.deleteMany(
-        { "columnId" : column._id}
+        { "columnId" : _id}
       ).exec();
 
       // if (!board) {

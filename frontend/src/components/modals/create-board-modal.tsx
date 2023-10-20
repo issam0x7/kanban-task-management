@@ -31,10 +31,10 @@ const formSchema = z.object({
 const CreateBoardModal = () => {
     const { isOpen, onClose, type } = useModal();
 
-    const { board, boards, setBoards, getBoardsRequest } = useBoardState((state) => ({
+    const { board, boards, setBoard, getBoardsRequest } = useBoardState((state) => ({
         board: state.board,
         boards: state.boards,
-        setBoards: state.setBoards,
+        setBoard: state.setBoardState,
         getBoardsRequest: state.getBoardsRequest,
     }));
 
@@ -88,6 +88,22 @@ const CreateBoardModal = () => {
             throw new Error('Network Error');
         }
     }
+
+    const handleRemoveColumn = async (columnId: string) => {
+        try {
+            if (isModalOpenForEdit) {
+                const res = await apiClient.delete(`/api/boards/${board._id}/columns`, { data: { _id: columnId } });
+                if (res.status === 200) {
+                    const columns = board.columns;
+                    columns.delete(columnId);
+                    setBoard({...board, columns});
+                }
+                return;
+            }
+        } catch (error) {
+            throw new Error('Network Error');
+        }
+    };
 
     const handleClose = () => {
         form.reset();
@@ -150,9 +166,14 @@ const CreateBoardModal = () => {
                                                                 className="pe-0"
                                                                 size="sm"
                                                                 variant="transparent"
-                                                                onClick={(): void => remove(i)}
+                                                                onClick={() => {
+                                                                    if (item._id) {
+                                                                        handleRemoveColumn(item._id);
+                                                                        remove(i)
+                                                                    }
+                                                                }}
                                                             >
-                                                               <Trash2 className="text-destructive" />
+                                                                <Trash2 className="text-destructive" />
                                                             </Button>
                                                         ) : (
                                                             <Button
