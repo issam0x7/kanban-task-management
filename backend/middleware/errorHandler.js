@@ -8,7 +8,9 @@ const errorHandler = (err, req, res, next) => {
 
     res.status(status);
 
-    res.json({ message: 'Server Error' })
+    res.json({ message: 'Server Error' });
+
+    
 }
 
 module.exports = errorHandler;

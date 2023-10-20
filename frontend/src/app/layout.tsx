@@ -1,8 +1,8 @@
 import { ThemeProvider } from "@/providers/theme-provider";
-import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans as PalusJakartaSnas } from "next/font/google";
 import { cn } from "@/lib/utils";
+import "../styles/globals.css";
 
 const inter = PalusJakartaSnas({
   subsets: ["latin"],
