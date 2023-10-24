@@ -1,11 +1,13 @@
+import { signIn } from 'next-auth/react';
+
 import Image from 'next/image';
-import '../styles/globals.css';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/Input';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
+import '../styles/globals.css';
 
 const loginSchema = z.object({
     email: z.string().email(),
@@ -72,15 +74,15 @@ const Login = () => {
                             <Button disabled={isSubmitign} className="w-full rounded-full" type="submit">
                                 Login
                             </Button>
-                            <button
-                              //   onClick={() => signIn('google')}
-                                className="w-full  justify-center bg-gray-100 text-black font-semibold py-3 px-6 rounded-2xl flex items-center space-x-2"
-                            >
-                                <Image src="/google.png" width={20} height={20} alt="google's logo" />
-                                <span>Sign in with Google</span>
-                            </button>
                         </form>
                     </Form>
+                    <button
+                        onClick={() => signIn('google', { callbackUrl: 'http://localhost:3000/' })}
+                        className="w-full  justify-center bg-gray-100 text-black font-semibold py-3 px-6 rounded-2xl flex items-center space-x-2"
+                    >
+                        <Image src="/google.png" width={20} height={20} alt="google's logo" />
+                        <span>Sign in with Google</span>
+                    </button>
                 </div>
             </div>
         </div>

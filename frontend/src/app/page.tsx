@@ -1,3 +1,4 @@
+"use client"
 import { Input } from "@/components/ui/Input";
 // import Button from "@/components/ui/button";
 import {
@@ -12,7 +13,11 @@ import CreateBoardModal from "@/components/modals/create-board-modal";
 import CreateTaskModal from "@/components/modals/create-task-modal";
 import TaskDetailModal from "@/components/modals/task-detail-modal";
 
+import { useSession } from "next-auth/react"
+
 export default function Home() {
+  
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {/* <Button variant="destructive" />
