@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans as PalusJakartaSnas } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "../styles/globals.css";
-import { getServerSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
 const inter = PalusJakartaSnas({
@@ -23,7 +23,7 @@ export default async function RootLayout({
 }) {
 
   const session = await getServerSession(authOptions);
-  console.log(session)
+  console.log( "session -> " + session)
 
   return (
     <html lang="en">
