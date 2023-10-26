@@ -5,6 +5,8 @@ import { getBoards } from "@/api/boards";
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
 
 import ModalProvider from "@/providers/modal-provider";
+import { getCurrentUser } from "@/lib/session";
+import { notFound } from "next/navigation";
 
 
 interface DashboardLayoutProps {
@@ -14,6 +16,12 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
+
+  const user = await getCurrentUser();
+
+  if(!user) {
+    return notFound();
+  }
 
   const boards = await getBoards();
   
