@@ -11,8 +11,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 8,
-    maxLength: 30,
+    maxLength: 40,
   },
+  name : {
+    type : String,
+    required : true,
+  },
+  first_name : {
+    type : String,
+    required : true
+  },
+  last_name : {
+    type : String,
+    required : true
+  }
 });
 
 // Hash the password before saving the user
