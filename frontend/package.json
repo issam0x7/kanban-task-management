@@ -25,6 +25,7 @@
     "add": "^2.0.6",
     "autoprefixer": "10.4.14",
     "axios": "^1.5.1",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "eslint": "8.44.0",
@@ -52,6 +53,7 @@
     "zustand": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.1",
     "@types/react-beautiful-dnd": "^13.1.6"
   },
   "resolutions": {

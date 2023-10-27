@@ -24,7 +24,12 @@ const Login = () => {
     });
 
     async function onSubmit(value: z.infer<typeof loginSchema>) {
-        console.log(value);
+        try {
+          const res = await signIn("credentials", { redirect : false, email : value.email, password : value.password });
+          console.log(res)
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     const isSubmitign = form.formState.isSubmitting;
