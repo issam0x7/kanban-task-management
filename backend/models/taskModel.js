@@ -10,7 +10,7 @@ const taskSchema = new mongoose.Schema({
          isCompleted: Boolean,
       },
    ],
-   columnId: { type: mongoose.Schema.Types.ObjectId, ref: "Column", required : true },
+   columnId: { type: mongoose.Schema.Types.ObjectId, ref: "Column", required: true },
 
    //  subtasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
 });

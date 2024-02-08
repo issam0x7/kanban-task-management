@@ -11,6 +11,8 @@ const loginLimiter = require('./middleware/loginLimiter');
 
 var app = express();
 
+
+// Handle CROS 
 app.use(cors());
 
 app.use(loginLimiter);
