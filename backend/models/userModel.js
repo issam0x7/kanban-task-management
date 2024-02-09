@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: roles,
+      // enum: roles,
       default: "user",
     },
     permissions: {
@@ -65,11 +65,11 @@ const userSchema = new mongoose.Schema(
     },
     plan: {
       type: String,
-      enum: Object.keys(plans),
+      // enum: Object.keys(plans),
     },
     period: {
       type: String,
-      enum: Object.keys(periods),
+      // enum: Object.keys(periods),
     },
     isEmailVerified: {
       type: Boolean,

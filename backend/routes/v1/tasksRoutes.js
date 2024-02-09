@@ -5,7 +5,7 @@ const {
    removeTask,
    addSubtask,
    updateSubtask,
-} = require("../controllers/taskController");
+} = require("../../controllers/taskController");
 
 router
    .put("/:id", updateTask)

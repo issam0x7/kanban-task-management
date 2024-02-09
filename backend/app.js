@@ -4,10 +4,9 @@ const cookieParser = require('cookie-parser');
 const { logger } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 
-const boardRouters = require('./routes/boardRoutes');
-const tasksRouters = require('./routes/tasksRoutes');
-const userRouters = require('./routes/userRouter');
 const loginLimiter = require('./middleware/loginLimiter');
+const router = require('./routes/v1');
+const httpLogger = require('./config/httpLogger');
 
 var app = express();
 
@@ -15,15 +14,14 @@ var app = express();
 // Handle CROS 
 app.use(cors());
 
-app.use(loginLimiter);
-app.use(logger);
+
+app.use(httpLogger);
+// app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/boards', boardRouters);
-app.use('/api/tasks', tasksRouters);
-app.use('/api/users', userRouters);
+app.use('/v1', router);
 
 app.use(errorHandler);
 

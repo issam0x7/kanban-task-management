@@ -7,7 +7,9 @@ const Task = require("../models/taskModel");
 // @access Private
 async function createBoard(req, res) {
    try {
-      const { name, columns } = req.body;
+
+      const name = req.body.name;
+      const columns = req.body.columns;
 
       if (!name || !columns || !Array.isArray(columns)) {
          return res

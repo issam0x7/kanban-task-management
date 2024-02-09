@@ -7,10 +7,12 @@ const {
     deleteBoard,
     updateBoardCloumns,
     deleteColumn,
-} = require('../controllers/boardControllers');
+} = require('../../controllers/boardControllers');
+const validate = require('../../middleware/validate');
+const { boardValidation } = require('../../utils/validation');
 
-router.get('/', getBoards)
-    .post('/', createBoard)
+router.get('/' ,getBoards)
+    .post('/', validate(boardValidation.createBoard), createBoard)
     .get('/:id', getBoard)
     .put('/:id', updateBoard)
     .put('/:id/columns', updateBoardCloumns)
