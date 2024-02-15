@@ -1,16 +1,27 @@
-const { logEvent } = require('./logger');
+const { logEvent } = require("./logger");
+
+const errorConverter = (err, req, res, next) => {
+  const error = err;
+
+  console.log("TYPE OF ERROR : ", typeof error);
+
+  console.log("ERROR_CONVERTER : ", err.message);
+
+  return next(err);
+};
 
 const errorHandler = (err, req, res, next) => {
-    logEvent(`${err.name}: ${err.message}\t${req.method}\t${req.url}\t${req.headers.origin}`, 'error.log');
-    console.error(err.stack);
+  logEvent(
+    `${err.name}: ${err.message}\t${req.method}\t${req.url}\t${req.headers.origin}`,
+    "error.log"
+  );
 
-    const status = res.statusCode ? res.statusCode : 500;
+  const status = err.statusCode ? err.statusCode : 500;
 
-    res.status(status);
+  res.status(status).send({ message: err.message });
+};
 
-    res.json({ message: 'Server Error' });
-
-    
-}
-
-module.exports = errorHandler;
+module.exports = {
+  errorConverter,
+  errorHandler,
+};

@@ -9,11 +9,12 @@ const {
     deleteColumn,
 } = require('../../controllers/boardControllers');
 const validate = require('../../middleware/validate');
-const { boardValidation } = require('../../utils/validation');
+const { boardValidation } = require('../../validation');
+
 
 router.get('/' ,getBoards)
     .post('/', validate(boardValidation.createBoard), createBoard)
-    .get('/:id', getBoard)
+    .get('/:id', validate(boardValidation.getBoard), getBoard)
     .put('/:id', updateBoard)
     .put('/:id/columns', updateBoardCloumns)
     .delete('/:id', deleteBoard)

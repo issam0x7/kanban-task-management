@@ -12,10 +12,13 @@ const boardSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required : true,
     },
   },
   { _id: true }
 ); // Include the _id field explicitly
 
-module.exports = mongoose.model("Board", boardSchema);
+const Board = mongoose.model("Board", boardSchema);
+
+module.exports = Board;
 
