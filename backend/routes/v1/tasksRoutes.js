@@ -10,7 +10,7 @@ const {
 router
    .put("/:id", updateTask)
    .put("/:id/subtasks", updateSubtask)
-   .post("/create", addTask)
+   .post("/", addTask)
    .post("/create/subTask/:id", addSubtask)
    .delete("/:id", removeTask);
 

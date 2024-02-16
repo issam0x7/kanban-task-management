@@ -1,8 +1,9 @@
 const { default: mongoose } = require("mongoose");
+const MongoSchema = require("../config/mongoSchema");
 
 const { ObjectId } = mongoose.Types;
 
-const profileShema = mongoose.Schema({
+const profileShema = MongoSchema({
   user: {
     typeof: ObjectId,
     ref: "User",
@@ -40,11 +41,10 @@ const profileShema = mongoose.Schema({
   },
 });
 
-
 /**
  * @typedef Profile
  */
 
-const Profile = mongoose.model('Profile', profileShema);
+const Profile = mongoose.model("Profile", profileShema);
 
 module.exports = Profile;

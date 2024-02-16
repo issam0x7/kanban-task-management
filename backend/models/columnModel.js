@@ -1,15 +1,14 @@
-const mongoose = require('mongoose');
+const MongoSchema = require("../config/mongoSchema");
 
-
-const columnSchema = new mongoose.Schema({
+const columnSchema = new MongoSchema({
   name: String,
-  color : String,
-  tasks: [{
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "Task"
-  }],
+  color: String,
+  tasks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Task",
+    },
+  ],
 });
 
-
-
-module.exports = mongoose.model('Column', columnSchema);
+module.exports = mongoose.model("Column", columnSchema);

@@ -3,7 +3,6 @@ const Board = require("../models/boardModel");
 const Task = require("../models/taskModel");
 const { boardService } = require("../services");
 const httpStatus = require("http-status");
-const ApiError = require("../utils/apiError");
 
 /** @desc Create a board
  *  @route POST /api/boards
@@ -15,16 +14,19 @@ async function createBoard(req, res) {
   res.status(httpStatus.CREATED).send(board);
 }
 
-// @desc Get a board
-// @route GET /api/boards/:id
-// @access Private
-async function getBoard(req, res) {
+/** @desc Get a board
+ * @route GET /api/boards/:id
+ * @access Private
+ */
+async function getBoard(req, res, next) {
   try {
     const boardId = req.params.id;
-    const board = await boardService.getBoardById(boardId)
+    const board = await boardService.getBoardById(boardId);
 
     if (!board) {
-      return res.status(404).json({ message: "Board not found" });
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ message: "Board not found" });
     }
 
     res.json({ board: board[0] });
@@ -33,99 +35,45 @@ async function getBoard(req, res) {
   }
 }
 
-// @desc Get all boards
-// @route GET /api/boards
-// @access Private
-async function getBoards(req, res) {
+/**
+ * @desc Get all boards
+ * @route GET /api/boards
+ * @access Private
+ */
+async function getBoards(req, res, next) {
   try {
     // Fetch all boards from the database
-    const boards = await Board.aggregate([
-      { $unwind: "$columns" /* Unwind the columns array*/ },
-      {
-        $lookup: {
-          from: "tasks",
-          /* Name of the tasks collection*/
-          localField: "columns._id",
-          foreignField: "columnId",
-          as: "tasks",
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          name: { $first: "$name" },
-          /* Keep the board name*/
-          columns: {
-            $push: {
-              name: "$columns.name",
-              _id: "$columns._id",
-              tasks: "$tasks",
-            },
-          },
-        },
-      },
-    ]);
+    const boards = await boardService.getBoards();
     res.json(boards);
   } catch (error) {
     next(error);
   }
 }
 
-// @desc Update a board
-// @route PATCH /api/boards/:id
-// @access Private
-async function updateBoard(req, res) {
+/**
+ * @desc Update a board
+ * @route PATCH /api/boards/:id
+ * @access Private
+ */
+async function updateBoard(req, res, next) {
   try {
-    const { id, name, columns } = req.body;
+    const board = await boardService.updateBoard(req.params.id, req.body);
 
-    // Confirm data
-    if (!id) {
-      return res.status(400).json({ message: "Board ID required" });
-    }
-
-    // Confirm board exists to update
-    const board = await Board.findById(id).exec();
-
-    if (!board) {
-      return res.status(404).json({ message: "Board not found" });
-    }
-
-    // Update board
-    board.name = name;
-    board.columns = columns;
-
-    const updatedBoard = await board.save();
-
-    res.json(`'${updatedBoard.name}' updated`);
+    res.json({ message: "Board Updated", board: board });
   } catch (error) {
     next(error);
   }
 }
 
-// @desc Delete a board
-// @route DELETE /api/boards/:id
-// @access Private
-async function deleteBoard(req, res) {
+/**
+ * @desc Delete a board
+ * @route DELETE /api/boards/:id
+ * @access Private
+ */
+async function deleteBoard(req, res, next) {
   try {
-    const { id } = req.params;
-
-    // Confirm data
-    if (!id) {
-      return res.status(400).json({ message: "Board ID required" });
-    }
-
-    // Confirm board exists to delete
-    const board = await Board.findById(id).exec();
-
-    if (!board) {
-      return res.status(404).json({ message: "Board not found" });
-    }
-
-    const result = await board.deleteOne();
-
-    const reply = `Board '${result.name}' with ID ${result._id} deleted`;
-
-    res.json(reply);
+    const board = await boardService.deleteBoard(req.params.id);
+    res.json({message : `the Board ${board.name} is deleted`});
   } catch (error) {
     next(error);
   }

@@ -2,7 +2,7 @@ const { logEvent } = require("./logger");
 
 const errorConverter = (err, req, res, next) => {
   const error = err;
-
+  console.log(err)
   console.log("TYPE OF ERROR : ", typeof error);
 
   console.log("ERROR_CONVERTER : ", err.message);

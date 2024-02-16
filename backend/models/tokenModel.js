@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
-const validator = require('validator');
+const MongoSchema = require("../config/mongoSchema");
 
-const tokenShema = new mongoose.Schema(
+const tokenShema = new MongoSchema(
   {
     token: {
       type: String,
@@ -35,8 +35,6 @@ const tokenShema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
-const Token = mongoose.model('Token', tokenShema);
-
+const Token = mongoose.model("Token", tokenShema);
 
 module.exports = Token;

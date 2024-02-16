@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const MongoSchema = require("../config/mongoSchema");
 
-const userSchema = new mongoose.Schema(
+const userSchema = new MongoSchema(
   {
     email: {
       type: String,
@@ -134,6 +135,5 @@ userSchema.pre("save", async function (next) {
  */
 
 const User = mongoose.model("User", userSchema);
-
 
 module.exports = User;

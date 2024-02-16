@@ -15,9 +15,9 @@ const { boardValidation } = require('../../validation');
 router.get('/' ,getBoards)
     .post('/', validate(boardValidation.createBoard), createBoard)
     .get('/:id', validate(boardValidation.getBoard), getBoard)
-    .put('/:id', updateBoard)
+    .put('/:id', validate(boardValidation.updateBoard), updateBoard)
     .put('/:id/columns', updateBoardCloumns)
-    .delete('/:id', deleteBoard)
+    .delete('/:id', validate(boardValidation.removeBoard), deleteBoard)
     .delete('/:id/columns', deleteColumn)
 
 module.exports = router;
