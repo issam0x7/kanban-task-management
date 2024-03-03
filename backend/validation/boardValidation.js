@@ -37,6 +37,18 @@ const updateBoard = {
   }),
 };
 
+const updateBoardCloumns = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+  body: Joi.array().items(
+    Joi.object().keys({
+      name: Joi.string().required(),
+      color: Joi.string().required(),
+    })
+  ),
+};
+
 module.exports = {
   createBoard,
   getBoard,

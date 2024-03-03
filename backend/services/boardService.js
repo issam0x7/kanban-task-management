@@ -134,7 +134,40 @@ const deleteBoard = async (boardId) => {
     throw new ApiError(httpStatus.NOT_FOUND, "board not found");
   }
 
-  // await board.remove();
+  return board;
+};
+
+/**
+ * @desc Update Board columns
+ * @param {string} boardId
+ * @param {Array} columns
+ */
+
+const UpdateBoardColumns = async (boardId, columns) => {
+  // Confirm board exists to update
+  const board = await Board.findById(boardId);
+
+  if (!board) {
+    throw new ApiError(httpStatus.NOT_FOUND, "board not found");
+  }
+
+  const colIds = Array.from(board.columns.map((col) => col._id.toString()));
+
+  columns.forEach((col) => {
+    const isExist = colIds.includes(col._id);
+    if (isExist) {
+      board.columns.forEach((column) => {
+        if (column._id.toString() === col?._id) {
+          column.name = col.name;
+          return;
+        }
+      });
+    } else {
+      board.columns.push(col);
+    }
+  });
+
+  await board.save();
 
   return board;
 };

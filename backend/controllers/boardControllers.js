@@ -81,41 +81,11 @@ async function deleteBoard(req, res, next) {
 
 async function updateBoardCloumns(req, res) {
   try {
-    const { id } = req.params;
+   
 
-    const { name, columns } = req.body;
+    
 
-    // Confirm data
-    if (!id) {
-      return res.status(400).json({ message: "Board ID required" });
-    }
-
-    // Confirm board exists to update
-    const board = await Board.findById(id).exec();
-
-    if (!board) {
-      return res.status(404).json({ message: "Board not found" });
-    }
-
-    board.name = name;
-
-    const colIds = Array.from(board.columns.map((col) => col._id.toString()));
-
-    columns.forEach((col) => {
-      const isExist = colIds.includes(col._id);
-      if (isExist) {
-        board.columns.forEach((column) => {
-          if (column._id.toString() === col?._id) {
-            column.name = col.name;
-            return;
-          }
-        });
-      } else {
-        board.columns.push(col);
-      }
-    });
-
-    const updatedBoard = await board.save();
+    
 
     res.json({ message: `'${updatedBoard.name}' updated`, board: board });
   } catch (error) {
