@@ -73,59 +73,32 @@ async function updateBoard(req, res, next) {
 async function deleteBoard(req, res, next) {
   try {
     const board = await boardService.deleteBoard(req.params.id);
-    res.json({message : `the Board ${board.name} is deleted`});
+    res.json({ message: `the Board ${board.name} is deleted` });
   } catch (error) {
     next(error);
   }
 }
 
-async function updateBoardCloumns(req, res) {
+async function updateBoardCloumns(req, res, next) {
   try {
-   
+    const board = await boardService.UpdateBoardColumns(
+      req.params.id,
+      req.body
+    );
 
-    
-
-    
-
-    res.json({ message: `'${updatedBoard.name}' updated`, board: board });
+    res.json({ message: `'${board.name}' updated`, board: board });
   } catch (error) {
-    // next(error);
-    console.log(error);
+    next(error);
   }
 }
 
-async function deleteColumn(req, res) {
+async function deleteColumn(req, res, next) {
   try {
-    const { id } = req.params;
+    await boardService.removeColumn(req.params.id, req.body.columnId);
 
-    const { _id } = req.body;
-    // Confirm data
-    if (!id && _id) {
-      return res.status(400).json({ message: "Board ID required" });
-    }
-
-    // Confirm board exists to delete
-    const result = await Board.updateOne(
-      {
-        _id: id,
-      },
-      { $pull: { columns: { _id: _id } } }
-    ).exec();
-
-    const removeReslut = await Task.deleteMany({ columnId: _id }).exec();
-
-    // if (!board) {
-    //    return res.status(404).json({ message: "Board not found" });
-    // }
-
-    // const result = await board.deleteOne();
-
-    // const reply = `Board '${result.name}' with ID ${result._id} deleted`;
-
-    res.json({ result, removeReslut });
+    res.status(httpStatus.NO_CONTENT).send();
   } catch (error) {
-    // next(error);
-    console.log(error);
+    next(error);
   }
 }
 

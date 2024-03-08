@@ -49,9 +49,20 @@ const updateBoardCloumns = {
   ),
 };
 
+const removeColumn = {
+  params: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
+  body: Joi.object().keys({
+    columnId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createBoard,
   getBoard,
   updateBoard,
   removeBoard,
+  updateBoardCloumns,
+  removeColumn,
 };

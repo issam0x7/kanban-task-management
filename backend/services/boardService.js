@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const Board = require("../models/boardModel");
 const ApiError = require("../utils/apiError");
 const httpStatus = require("http-status");
+const Task = require("../models/taskModel");
 
 /**
  * Create Board
@@ -142,7 +143,6 @@ const deleteBoard = async (boardId) => {
  * @param {string} boardId
  * @param {Array} columns
  */
-
 const UpdateBoardColumns = async (boardId, columns) => {
   // Confirm board exists to update
   const board = await Board.findById(boardId);
@@ -155,19 +155,42 @@ const UpdateBoardColumns = async (boardId, columns) => {
 
   columns.forEach((col) => {
     const isExist = colIds.includes(col._id);
-    if (isExist) {
+    if (!isExist) {
+      board.columns.push(col);
+    } else {
       board.columns.forEach((column) => {
         if (column._id.toString() === col?._id) {
           column.name = col.name;
           return;
         }
       });
-    } else {
-      board.columns.push(col);
     }
   });
 
   await board.save();
+
+  return board;
+};
+
+/**
+ * @description Remove Column from board
+ * @param {string} boardId
+ * @param {string} columnId
+ */
+
+const removeColumn = async (boardId, columnId) => {
+  const board = await Board.updateOne(
+    {
+      _id: boardId,
+    },
+    { $pull: { columns: { _id: columnId } } }
+  );
+
+  if (!board) {
+    throw new ApiError(httpStatus.NOT_FOUND, "board not exist");
+  }
+
+  await Task.deleteMany({ columnId: columnId });
 
   return board;
 };
@@ -178,4 +201,6 @@ module.exports = {
   getBoards,
   updateBoard,
   deleteBoard,
+  UpdateBoardColumns,
+  removeColumn,
 };
