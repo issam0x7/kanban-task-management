@@ -4,7 +4,7 @@ const MongoSchema = require("../config/mongoSchema");
 const taskSchema = new MongoSchema({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  isCompleted: { type: Boolean, required: true },
+  isCompleted: { type : Boolean, required: true },
   subtasks: [
     {
       title: String,

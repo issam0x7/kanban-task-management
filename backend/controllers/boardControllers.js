@@ -1,6 +1,3 @@
-const { default: mongoose } = require("mongoose");
-const Board = require("../models/boardModel");
-const Task = require("../models/taskModel");
 const { boardService } = require("../services");
 const httpStatus = require("http-status");
 

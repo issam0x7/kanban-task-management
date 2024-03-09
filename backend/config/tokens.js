@@ -7,6 +7,6 @@ const TOKEN_TYPES = {
     VERIFY_EMAIL: 'verifyEmail',
 };
 
-module.export = {
+module.exports = {
     TOKEN_TYPES,
 }
