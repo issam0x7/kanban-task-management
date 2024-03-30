@@ -64,14 +64,14 @@ const userSchema = new MongoSchema(
         "complete",
       ],
     },
-    plan: {
-      type: String,
-      // enum: Object.keys(plans),
-    },
-    period: {
-      type: String,
-      // enum: Object.keys(periods),
-    },
+    // plan: {
+    //   type: String,
+    //   // enum: Object.keys(plans),
+    // },
+    // period: {
+    //   type: String,
+    //   // enum: Object.keys(periods),
+    // },
     isEmailVerified: {
       type: Boolean,
       default: false,
