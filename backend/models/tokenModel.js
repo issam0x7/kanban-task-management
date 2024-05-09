@@ -17,7 +17,6 @@ const tokenShema = new MongoSchema(
       type: String,
       enum: [
         TOKEN_TYPES.ACCESS,
-        TOKEN_TYPES.ACCESS,
         TOKEN_TYPES.REFRESH,
         TOKEN_TYPES.RESET_PASSWORD,
       ],
@@ -26,10 +25,6 @@ const tokenShema = new MongoSchema(
     expires: {
       type: Date,
       required: true,
-    },
-    blacklisted: {
-      type: Boolean,
-      default: false,
     },
   },
   { timestamps: true }
