@@ -113,16 +113,20 @@ userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
  * @returns {boolean}
  */
 
-userSchema.methods.isPasswordMatch = (password) => {
-  const user = this;
-  return bcrypt.compare(password, user.password);
+userSchema.methods.isPasswordMatch = function(password)  {
+  try {
+    const user = this;
+    return bcrypt.compare(password, user.password);
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 // Hash the password before saving the user
 userSchema.pre("save", async function (next) {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    const hashedPassword =  bcrypt.hash(this.password);
     this.password = hashedPassword;
     next();
   } catch (error) {

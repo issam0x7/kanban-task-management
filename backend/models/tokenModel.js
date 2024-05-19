@@ -1,5 +1,6 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const MongoSchema = require("../config/mongoSchema");
+const { TOKEN_TYPES } = require("../config/tokens");
 
 const tokenShema = new MongoSchema(
   {
@@ -9,7 +10,7 @@ const tokenShema = new MongoSchema(
       index: true,
     },
     user: {
-      type: mongoose.SchemaType.ObjectId,
+      type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
       required: true,
     },

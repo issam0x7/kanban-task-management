@@ -9,7 +9,8 @@ const { TOKEN_TYPES } = require("../config/tokens")
 const generateJwtToken = (userId, expire,type, secret = config.jwt.secret) => {
     const payload = {
         sub : userId,
-        exp : addMinutes(new Date(), expire),
+        exp : addMinutes(new Date(), expire).getTime(),
+        expire: addMinutes(new Date(), expire) ,
         type
     }
 
@@ -24,7 +25,7 @@ const saveToken  =async (token, userId , type, expireAt) => {
         token,
         user : userId,
         type,
-        expire : expireAt
+        expires : expireAt
     })
 
     return tokenDoc;
@@ -57,17 +58,25 @@ const generateAuthToken =async (userId) => {
 
     const refreshToken = generateJwtToken(userId, refreshTokenExpire, TOKEN_TYPES.REFRESH, secret);
 
+    
+
     await saveToken(refreshToken, userId, TOKEN_TYPES.REFRESH, refreshTokenExpire);
 
     return {
         accessToken : {
             token : accessToken,
-            expireAt : accessTokenExpire.toLocaleDateString()
+            expireAt : accessTokenExpire
         },
         refreshToken : {
             token : refreshToken,
-            expireAt : refreshTokenExpire.toLocaleDateString()
+            expireAt : refreshTokenExpire
         }
     }
 
+}
+
+
+module.exports = {
+    verifyToken,
+    generateAuthToken,
 }
